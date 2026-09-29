@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingWidget from '../components/BookingWidget';
+import { business } from '../data/site';
+---
+
+<BaseLayout
+  title="Book an Appointment"
+  description={`Book your massage appointment online at ${business.name} in ${business.town}.`}
+>
+  <section class="mx-auto max-w-3xl px-6 py-16">
+    <h1 class="font-display text-4xl font-semibold text-brand-forest">Book an appointment</h1>
+    <p class="mt-4 text-brand-ink/70">
+      Pick a treatment, choose a time that works for you, and pop in your details. Prefer to book
+      by phone? Call {business.phoneDisplay}.
+    </p>
+
+    <div class="mt-10">
+      <BookingWidget client:load />
+    </div>
+  </section>
+</BaseLayout>

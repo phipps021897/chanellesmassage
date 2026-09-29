@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderPhoto from '../components/PlaceholderPhoto.astro';
+
+const placeholders = [
+  'Treatment room',
+  'Reception / waiting area',
+  'Massage in progress (with client consent)',
+  'Product / oils detail shot',
+  'Exterior / signage',
+  'Chanelle at work',
+];
+---
+
+<BaseLayout
+  title="Gallery"
+  description="A look inside Chanelle's Massage studio in Weymouth."
+>
+  <section class="mx-auto max-w-6xl px-6 py-16">
+    <h1 class="font-display text-4xl font-semibold text-brand-forest">Gallery</h1>
+    <p class="mt-4 max-w-2xl text-brand-ink/70">
+      <!-- TODO: replace every tile below with a real photo. Drop images into
+           public/images/gallery/ and swap each <PlaceholderPhoto> for a plain
+           <img src="/images/gallery/your-file.jpg" alt="..." loading="lazy" /> -->
+      A few glimpses of the studio and treatments on offer. Real photos coming soon — follow
+      along on{' '}
+      <a href="https://www.instagram.com/chanellesmassage" class="font-semibold underline underline-offset-4">
+        Instagram
+      </a>{' '}
+      for the latest.
+    </p>
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {placeholders.map((label) => <PlaceholderPhoto label={label} />)}
+    </div>
+  </section>
+</BaseLayout>

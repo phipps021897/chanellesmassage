@@ -1,0 +1,49 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PlaceholderPhoto from '../components/PlaceholderPhoto.astro';
+import { business } from '../data/site';
+import { withBase } from '../lib/url';
+---
+
+<BaseLayout
+  title="About"
+  description={`Meet the therapist behind ${business.name} in Weymouth, Dorset.`}
+>
+  <section class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-2">
+    <PlaceholderPhoto label="Photo of Chanelle" />
+    <div>
+      <h1 class="font-display text-4xl font-semibold text-brand-forest">About {business.shortName}</h1>
+      <!-- TODO: replace with Chanelle's real bio — qualifications, years of experience,
+           what drew her to massage therapy, and what clients can expect from a session. -->
+      <p class="mt-6 text-brand-ink/80">
+        Chanelle is a qualified massage therapist based in Weymouth, dedicated to helping clients
+        relax, recover and feel their best. Every treatment is tailored to what your body needs
+        that day, in a calm, welcoming space designed to help you switch off from the everyday.
+      </p>
+      <!-- TODO: add qualifications / certifications, e.g. ITEC / VTCT Level 3 Diploma in
+           Massage Therapy, insurance body membership, years practising, specialisms. -->
+      <p class="mt-4 text-brand-ink/80">
+        Fully qualified and insured, with a focus on relaxation, deep tissue and sports massage
+        techniques suited to everyone from busy professionals to active athletes.
+      </p>
+      <a
+        href={withBase('/booking/')}
+        class="mt-8 inline-block rounded-full bg-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-cream uppercase hover:bg-brand-forest-dark"
+      >
+        Book an appointment
+      </a>
+    </div>
+  </section>
+
+  <section class="bg-brand-sage-light/40 py-16">
+    <div class="mx-auto max-w-4xl px-6 text-center">
+      <h2 class="font-display text-3xl font-semibold text-brand-forest">My approach</h2>
+      <!-- TODO: replace with Chanelle's real philosophy / values statement. -->
+      <p class="mx-auto mt-4 max-w-2xl text-brand-ink/70">
+        Every client is different, so every session starts with a conversation about what you
+        need — whether that's deep, focused work on a problem area, or a slower, more relaxing
+        treatment to help you unwind.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,57 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getServicesForBuild } from '../lib/services.server';
+import { formatPrice } from '../data/services';
+import { withBase } from '../lib/url';
+
+const services = await getServicesForBuild();
+---
+
+<BaseLayout
+  title="Services & Prices"
+  description="Massage therapy services and prices at Chanelle's Massage in Weymouth — relaxation, deep tissue, sports and hot stone massage."
+>
+  <section class="mx-auto max-w-4xl px-6 py-16">
+    <h1 class="font-display text-4xl font-semibold text-brand-forest">Services & Prices</h1>
+    <p class="mt-4 text-brand-ink/70">
+      Every treatment is tailored to you. Not sure which is right?{' '}
+      <a href={withBase('/contact/')} class="font-semibold text-brand-forest underline underline-offset-4">
+        Get in touch
+      </a>{' '}
+      and we'll help you choose.
+    </p>
+
+    <div class="mt-10 divide-y divide-brand-sage/30">
+      {
+        services.map((service) => (
+          <div class="flex flex-col gap-2 py-6 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h2 class="font-display text-xl font-semibold text-brand-forest">{service.name}</h2>
+              <p class="mt-1 max-w-xl text-sm text-brand-ink/70">{service.description}</p>
+            </div>
+            <div class="text-left sm:text-right">
+              <p class="font-display text-lg font-semibold text-brand-gold">
+                {formatPrice(service.pricePence)}
+              </p>
+              <p class="text-xs tracking-wide text-brand-ink/50 uppercase">
+                {service.durationMinutes} minutes
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <a
+      href={withBase('/booking/')}
+      class="mt-10 inline-block rounded-full bg-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-cream uppercase hover:bg-brand-forest-dark"
+    >
+      Book an appointment
+    </a>
+
+    <!-- TODO: this list is either the bundled placeholder data (src/data/services.ts)
+         or the live Supabase `services` table if PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY
+         are set at build time. Update prices in the admin dashboard (/admin/) once
+         Supabase is connected, then re-run the deploy workflow to refresh this page. -->
+  </section>
+</BaseLayout>

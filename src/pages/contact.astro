@@ -1,0 +1,55 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { business } from '../data/site';
+import { withBase } from '../lib/url';
+---
+
+<BaseLayout
+  title="Contact"
+  description={`Get in touch with ${business.name} in ${business.town}.`}
+>
+  <section class="mx-auto max-w-3xl px-6 py-16 text-center">
+    <h1 class="font-display text-4xl font-semibold text-brand-forest">Get in touch</h1>
+    <p class="mt-4 text-brand-ink/70">
+      Have a question before booking, or need to change an existing appointment? Reach out any of
+      the ways below.
+    </p>
+
+    <div class="mt-10 grid gap-6 sm:grid-cols-3">
+      <a
+        href={business.phoneHref}
+        class="rounded-2xl border border-brand-sage/30 bg-white p-6 shadow-sm transition hover:shadow-md"
+      >
+        <p class="text-xs font-semibold tracking-wide text-brand-gold uppercase">Call</p>
+        <p class="mt-2 font-display text-lg font-semibold text-brand-forest">
+          {business.phoneDisplay}
+        </p>
+      </a>
+      <a
+        href={`mailto:${business.email}`}
+        class="rounded-2xl border border-brand-sage/30 bg-white p-6 shadow-sm transition hover:shadow-md"
+      >
+        <p class="text-xs font-semibold tracking-wide text-brand-gold uppercase">Email</p>
+        <p class="mt-2 font-display text-lg font-semibold text-brand-forest break-all">
+          {business.email}
+        </p>
+      </a>
+      <a
+        href={business.social.instagram}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="rounded-2xl border border-brand-sage/30 bg-white p-6 shadow-sm transition hover:shadow-md"
+      >
+        <p class="text-xs font-semibold tracking-wide text-brand-gold uppercase">Instagram</p>
+        <p class="mt-2 font-display text-lg font-semibold text-brand-forest">@chanellesmassage</p>
+      </a>
+    </div>
+
+    <p class="mt-10 text-sm text-brand-ink/60">
+      Prefer to book straight away? <a
+        href={withBase('/booking/')}
+        class="font-semibold text-brand-forest underline underline-offset-4">Book an appointment</a
+      >.
+    </p>
+  </section>
+</BaseLayout>

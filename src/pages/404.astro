@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/url';
+---
+
+<BaseLayout title="Page not found" noindex={true}>
+  <section class="mx-auto max-w-xl px-6 py-24 text-center">
+    <h1 class="font-display text-4xl font-semibold text-brand-forest">Page not found</h1>
+    <p class="mt-4 text-brand-ink/70">
+      Sorry, we couldn't find that page. Head back home, or jump straight to booking.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a
+        href={withBase('/')}
+        class="rounded-full bg-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-cream uppercase hover:bg-brand-forest-dark"
+      >
+        Back home
+      </a>
+      <a
+        href={withBase('/booking/')}
+        class="rounded-full border border-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-forest uppercase hover:bg-brand-forest/5"
+      >
+        Book Now
+      </a>
+    </div>
+  </section>
+</BaseLayout>

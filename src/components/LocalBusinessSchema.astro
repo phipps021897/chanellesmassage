@@ -1,0 +1,34 @@
+---
+import { business } from '../data/site';
+
+const openingHoursSpecification = business.hours
+  .filter((h) => h.open && h.close)
+  .map((h) => ({
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: h.day,
+    opens: h.open,
+    closes: h.close,
+  }));
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'HealthAndBeautyBusiness',
+  name: business.name,
+  description: business.metaDescription,
+  url: Astro.site?.toString(),
+  telephone: business.phoneDisplay,
+  email: business.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: business.address.line1,
+    addressLocality: business.address.line2,
+    addressRegion: business.address.region,
+    postalCode: business.address.postcode,
+    addressCountry: 'GB',
+  },
+  sameAs: [business.social.instagram],
+  openingHoursSpecification,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />

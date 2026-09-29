@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
+import PlaceholderPhoto from '../components/PlaceholderPhoto.astro';
+import { business } from '../data/site';
+import { getServicesForBuild } from '../lib/services.server';
+import { formatPrice } from '../data/services';
+import { withBase } from '../lib/url';
+
+const services = (await getServicesForBuild()).slice(0, 3);
+---
+
+<BaseLayout title="Relaxation & Deep Tissue Massage in Weymouth">
+  <LocalBusinessSchema />
+
+  <section class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-2 md:py-24">
+    <div>
+      <p class="placeholder-flag mb-4">Weymouth, Dorset</p>
+      <h1 class="font-display text-4xl leading-tight font-semibold text-brand-forest md:text-6xl">
+        Find your calm at {business.name}
+      </h1>
+      <p class="mt-6 text-lg text-brand-ink/80">
+        {business.tagline}. Professional, tailored massage therapy in a warm, welcoming space —
+        book online in minutes.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-4">
+        <a
+          href={withBase('/booking/')}
+          class="rounded-full bg-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-cream uppercase hover:bg-brand-forest-dark"
+        >
+          Book an appointment
+        </a>
+        <a
+          href={withBase('/services/')}
+          class="rounded-full border border-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-forest uppercase hover:bg-brand-forest/5"
+        >
+          View services
+        </a>
+      </div>
+    </div>
+    <PlaceholderPhoto label="Studio / treatment room hero photo" class="aspect-square" />
+  </section>
+
+  <section class="bg-brand-sage-light/40 py-16">
+    <div class="mx-auto max-w-6xl px-6">
+      <h2 class="font-display text-3xl font-semibold text-brand-forest">Popular treatments</h2>
+      <div class="mt-8 grid gap-6 md:grid-cols-3">
+        {
+          services.map((service) => (
+            <div class="rounded-2xl bg-white p-6 shadow-sm">
+              <h3 class="font-display text-xl font-semibold text-brand-forest">{service.name}</h3>
+              <p class="mt-2 text-sm text-brand-ink/70">{service.description}</p>
+              <p class="mt-4 font-semibold text-brand-gold">
+                {formatPrice(service.pricePence)} &middot; {service.durationMinutes} min
+              </p>
+            </div>
+          ))
+        }
+      </div>
+      <a
+        href={withBase('/services/')}
+        class="mt-8 inline-block text-sm font-semibold tracking-wide text-brand-forest uppercase underline decoration-brand-gold underline-offset-4"
+      >
+        See the full price list &rarr;
+      </a>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 py-16 text-center">
+    <h2 class="font-display text-3xl font-semibold text-brand-forest">Ready to relax?</h2>
+    <p class="mx-auto mt-4 max-w-xl text-brand-ink/70">
+      Book your appointment online, or get in touch if you have any questions about which
+      treatment is right for you.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-4">
+      <a
+        href={withBase('/booking/')}
+        class="rounded-full bg-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-cream uppercase hover:bg-brand-forest-dark"
+      >
+        Book Now
+      </a>
+      <a
+        href={withBase('/contact/')}
+        class="rounded-full border border-brand-forest px-7 py-3 text-sm font-semibold tracking-wide text-brand-forest uppercase hover:bg-brand-forest/5"
+      >
+        Contact Us
+      </a>
+    </div>
+  </section>
+</BaseLayout>

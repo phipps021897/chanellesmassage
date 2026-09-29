@@ -1,0 +1,53 @@
+---
+import { business, nav } from '../data/site';
+import { withBase } from '../lib/url';
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 border-b border-brand-sage/30 bg-brand-cream/95 backdrop-blur">
+  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <a href={withBase('/')} class="font-display text-2xl font-semibold tracking-wide text-brand-forest">
+      {business.name}
+    </a>
+
+    <nav class="hidden items-center gap-8 md:flex">
+      {
+        nav.map((item) => (
+          <a
+            href={withBase(item.href)}
+            class:list={[
+              'text-sm font-medium tracking-wide uppercase transition-colors hover:text-brand-gold',
+              currentPath === withBase(item.href) ? 'text-brand-gold' : 'text-brand-forest',
+            ]}
+          >
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <a
+      href={withBase('/booking/')}
+      class="rounded-full bg-brand-forest px-5 py-2.5 text-sm font-semibold tracking-wide text-brand-cream uppercase transition-colors hover:bg-brand-forest-dark"
+    >
+      Book Now
+    </a>
+  </div>
+
+  <nav class="flex items-center justify-center gap-6 border-t border-brand-sage/20 px-4 py-2 md:hidden">
+    {
+      nav.map((item) => (
+        <a
+          href={withBase(item.href)}
+          class:list={[
+            'text-xs font-medium tracking-wide uppercase',
+            currentPath === withBase(item.href) ? 'text-brand-gold' : 'text-brand-forest',
+          ]}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
+</header>

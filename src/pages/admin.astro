@@ -1,0 +1,10 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AdminApp from '../components/AdminApp';
+---
+
+<BaseLayout title="Admin" noindex={true}>
+  <section class="mx-auto max-w-4xl px-6 py-16">
+    <AdminApp client:only="react" />
+  </section>
+</BaseLayout>

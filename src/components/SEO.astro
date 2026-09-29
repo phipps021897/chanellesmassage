@@ -1,0 +1,31 @@
+---
+import { business } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  path: string;
+  noindex?: boolean;
+}
+
+const { title, description = business.metaDescription, path, noindex = false } = Astro.props;
+
+const canonicalURL = new URL(path, Astro.site);
+const fullTitle = `${title} | ${business.name}`;
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={business.name} />
+<meta property="og:locale" content="en_GB" />
+
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
