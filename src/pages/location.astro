@@ -1,19 +1,9 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { business } from '../data/site';
-import { getCoordinatesForAddress } from '../lib/geocode.server';
 
 const fullAddress = `${business.address.line1}, ${business.address.line2}, ${business.address.locality}, ${business.address.postcode}`;
-
-// Geocoded by postcode — the street/estate name alone doesn't resolve via
-// Nominatim, but the postcode does and is precise enough for a small UK
-// postcode. See src/lib/geocode.server.ts for the fallback if this fails.
-const { lat, lon } = await getCoordinatesForAddress(business.address.postcode);
-const delta = { lat: 0.003, lon: 0.004 };
-const mapEmbedSrc =
-  `https://www.openstreetmap.org/export/embed.html` +
-  `?bbox=${lon - delta.lon}%2C${lat - delta.lat}%2C${lon + delta.lon}%2C${lat + delta.lat}` +
-  `&layer=mapnik&marker=${lat}%2C${lon}`;
+const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}&output=embed`;
 const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
 ---
 

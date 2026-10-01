@@ -6,9 +6,9 @@ const currentPath = Astro.url.pathname;
 ---
 
 <header class="sticky top-0 z-50 border-b border-brand-sage/30 bg-brand-cream/95 backdrop-blur">
-  <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 sm:py-4">
     <a href={withBase('/')} class="shrink-0">
-      <img src={withBase('images/logo.jpg')} alt={business.name} class="h-14 w-auto" />
+      <img src={withBase('images/logo.jpg')} alt={business.name} class="h-12 w-auto sm:h-14" />
     </a>
 
     <nav class="hidden items-center gap-8 md:flex">
@@ -27,27 +27,57 @@ const currentPath = Astro.url.pathname;
       }
     </nav>
 
-    <a
-      href={withBase('/booking/')}
-      class="rounded-full bg-brand-forest px-5 py-2.5 text-sm font-semibold tracking-wide text-brand-cream uppercase transition-colors hover:bg-brand-forest-dark"
-    >
-      Book Now
-    </a>
-  </div>
+    <div class="flex shrink-0 items-center gap-2 sm:gap-3">
+      <a
+        href={withBase('/booking/')}
+        class="rounded-full bg-brand-forest px-4 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap text-brand-cream uppercase transition-colors hover:bg-brand-forest-dark sm:px-5 sm:text-sm"
+      >
+        Book Now
+      </a>
 
-  <nav class="flex items-center justify-center gap-6 border-t border-brand-sage/20 px-4 py-2 md:hidden">
-    {
-      nav.map((item) => (
-        <a
-          href={withBase(item.href)}
-          class:list={[
-            'text-xs font-medium tracking-wide uppercase',
-            currentPath === withBase(item.href) ? 'text-brand-gold' : 'text-brand-forest',
-          ]}
+      <details class="group relative md:hidden">
+        <summary
+          aria-label="Menu"
+          class="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-full border border-brand-sage/40 text-brand-forest [&::-webkit-details-marker]:hidden"
         >
-          {item.label}
-        </a>
-      ))
-    }
-  </nav>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            class="h-5 w-5 group-open:hidden"
+          >
+            <path stroke-linecap="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            class="hidden h-5 w-5 group-open:block"
+          >
+            <path stroke-linecap="round" d="M6 6l12 12M18 6L6 18" />
+          </svg>
+        </summary>
+
+        <nav class="absolute top-full right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-brand-sage/30 bg-brand-cream py-2 shadow-xl">
+          {
+            nav.map((item) => (
+              <a
+                href={withBase(item.href)}
+                class:list={[
+                  'block px-5 py-3 text-sm font-medium tracking-wide uppercase',
+                  currentPath === withBase(item.href) ? 'text-brand-gold' : 'text-brand-forest',
+                ]}
+              >
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </details>
+    </div>
+  </div>
 </header>
