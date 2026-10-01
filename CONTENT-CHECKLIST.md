@@ -47,22 +47,19 @@
 
 ## Location — [src/pages/location.astro](src/pages/location.astro)
 
-- [x] Real address wired in (5 Avon Close, Granby Industrial Estate, Weymouth, DT4 9UX), with a
-      proper Google Maps embed for that exact address
+- [x] Real address wired in (5 Avon Close, Granby Industrial Estate, Weymouth, DT4 9UX), with an
+      OpenStreetMap embed geocoded to that exact postcode plus a "Get Directions" link
 - [ ] Real parking / public transport / accessibility directions — still placeholder bullet points
 
 ## Branding
 
 - [x] Colour palette (black + gold, `src/styles/global.css`) and typography (Alex Brush script
-      wordmark + Cormorant Garamond headings, set in `src/layouts/BaseLayout.astro`) now match the
-      real Chanelle's Massage logo
-- [ ] **Add the real logo file** — drop it at `public/images/logo.png` (or `.svg`), then:
-  - Swap the text wordmark in `src/components/Header.astro` and `src/components/Footer.astro` for
-    `<img src={withBase('images/logo.png')} alt="Chanelle's Massage" class="h-12" />`
-  - Rebuild `public/favicon.svg` from the logo's circular mark for pixel-accurate browser tabs
-    (current one is a simplified gold-ring placeholder in the same style)
-- [ ] `og:image` — no social-share preview image is set yet; a cropped/square version of the logo
-      on black would work well for link previews when the site is shared on social media
+      wordmark + Cormorant Garamond headings) match the real Chanelle's Massage logo
+- [x] Real logo wired in: `public/images/logo.jpg` (full logo, used in the header), a cropped
+      emblem-only version for `public/favicon.png` / `public/apple-touch-icon.png`, and
+      `public/images/og-image.jpg` for social share previews. The footer keeps the script-font
+      text wordmark instead of the image, since the logo file has a solid black background that
+      would show as a visible box against the footer's gold background.
 
 ## Legal
 

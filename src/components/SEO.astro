@@ -12,6 +12,7 @@ const { title, description = business.metaDescription, path, noindex = false } =
 
 const canonicalURL = new URL(path, Astro.site);
 const fullTitle = `${title} | ${business.name}`;
+const ogImageURL = new URL(`${import.meta.env.BASE_URL}images/og-image.jpg`, Astro.site);
 ---
 
 <title>{fullTitle}</title>
@@ -25,7 +26,9 @@ const fullTitle = `${title} | ${business.name}`;
 <meta property="og:url" content={canonicalURL} />
 <meta property="og:site_name" content={business.name} />
 <meta property="og:locale" content="en_GB" />
+<meta property="og:image" content={ogImageURL} />
 
-<meta name="twitter:card" content="summary" />
+<meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageURL} />

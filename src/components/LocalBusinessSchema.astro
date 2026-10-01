@@ -16,6 +16,7 @@ const schema = {
   name: business.name,
   description: business.metaDescription,
   url: Astro.site?.toString(),
+  image: new URL(`${import.meta.env.BASE_URL}images/logo.jpg`, Astro.site).toString(),
   telephone: business.phoneDisplay,
   email: business.email,
   address: {
@@ -26,7 +27,7 @@ const schema = {
     postalCode: business.address.postcode,
     addressCountry: 'GB',
   },
-  sameAs: [business.social.instagram],
+  sameAs: [business.social.instagram, business.social.facebook, business.social.tiktok],
   openingHoursSpecification,
 };
 ---
