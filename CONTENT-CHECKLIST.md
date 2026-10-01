@@ -22,17 +22,9 @@
   - Sports Massage — 60 min — £45
   - Sports Massage & Consultation — 30 min — £30
   - Sports Massage & Consultation — 60 min — £50
-- [ ] **Still need a decision on the session-card packages** (not yet added anywhere):
-  - 3-session card, 30 min — £70
-  - 3-session card, 60 min — £125
-  - 6-session card, 30 min — £130
-  - 6-session card, 60 min — £250
-  - These are prepaid bundles of *future* sessions, not single bookable appointments — the
-    current booking system only handles one-off appointments, so "booking" a session card
-    wouldn't make sense through the online calendar as-is. Options: (a) list them on the Services
-    page as informational pricing only ("ask in person to purchase a session card"), or (b) build
-    proper credit tracking (a customer's remaining session balance, redeemed against future
-    bookings) — a meaningfully bigger feature. Ask Claude to scope this once a decision is made.
+- [x] Session card packages (3/6-session bundles) listed on the Services page as informational
+      pricing (`src/data/services.ts` → `sessionCards`) — not bookable online, same as today;
+      revisit if real credit tracking/redemption is ever wanted
 - [ ] Once Supabase is live, add these via the `/admin/` dashboard (recommended, since that's the
       source of truth the live Services page reads from) rather than only editing the fallback
       file
@@ -49,7 +41,6 @@
 
 - [x] Real address wired in (5 Avon Close, Granby Industrial Estate, Weymouth, DT4 9UX), with an
       OpenStreetMap embed geocoded to that exact postcode plus a "Get Directions" link
-- [ ] Real parking / public transport / accessibility directions — still placeholder bullet points
 
 ## Branding
 
