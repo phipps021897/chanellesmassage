@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getServicesForBuild } from '../lib/services.server';
-import { formatPrice } from '../data/services';
+import { formatPrice, sessionCards } from '../data/services';
 import { withBase } from '../lib/url';
 
 const services = await getServicesForBuild();
@@ -53,5 +53,39 @@ const services = await getServicesForBuild();
          or the live Supabase `services` table if PUBLIC_SUPABASE_URL / PUBLIC_SUPABASE_ANON_KEY
          are set at build time. Update prices in the admin dashboard (/admin/) once
          Supabase is connected, then re-run the deploy workflow to refresh this page. -->
+
+    <div class="mt-16 border-t border-brand-sage/30 pt-10">
+      <h2 class="font-display text-3xl font-semibold text-brand-forest">Session Cards</h2>
+      <p class="mt-2 max-w-2xl text-sm text-brand-ink/70">
+        Save by booking ahead — prepaid session cards for regular visits. Session cards aren't
+        booked online; get in touch or ask in person to purchase one, and your sessions will be
+        tracked for you.
+      </p>
+
+      <div class="mt-6 divide-y divide-brand-sage/30">
+        {
+          sessionCards.map((card) => (
+            <div class="flex flex-col gap-2 py-5 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <h3 class="font-display text-lg font-semibold text-brand-forest">
+                  {card.name} — {card.durationMinutes} min sessions
+                </h3>
+                <p class="mt-1 text-sm text-brand-ink/70">
+                  {card.sessionCount} sessions of {card.durationMinutes}-minute sports massage
+                </p>
+              </div>
+              <div class="text-left sm:text-right">
+                <p class="font-display text-lg font-semibold text-brand-gold">
+                  {formatPrice(card.pricePence)}
+                </p>
+                <p class="text-xs tracking-wide text-brand-ink/50 uppercase">
+                  {formatPrice(card.pricePence / card.sessionCount)} per session
+                </p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
   </section>
 </BaseLayout>

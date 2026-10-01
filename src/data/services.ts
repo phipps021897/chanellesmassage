@@ -64,3 +64,23 @@ export const placeholderServices: Service[] = [
 export function formatPrice(pricePence: number): string {
   return `£${(pricePence / 100).toFixed(2)}`;
 }
+
+export interface SessionCard {
+  id: string;
+  name: string;
+  durationMinutes: number;
+  sessionCount: number;
+  pricePence: number;
+}
+
+// Prepaid multi-session bundles. These are sold as a block of credit to
+// redeem over future visits, not a single timed appointment — so unlike
+// `placeholderServices` above, they're not bookable through the online
+// calendar. They're listed on the Services page for pricing only; Chanelle
+// tracks and redeems them manually when booking returning clients in.
+export const sessionCards: SessionCard[] = [
+  { id: 'card-3x30', name: '3-Session Card', durationMinutes: 30, sessionCount: 3, pricePence: 7000 },
+  { id: 'card-3x60', name: '3-Session Card', durationMinutes: 60, sessionCount: 3, pricePence: 12500 },
+  { id: 'card-6x30', name: '6-Session Card', durationMinutes: 30, sessionCount: 6, pricePence: 13000 },
+  { id: 'card-6x60', name: '6-Session Card', durationMinutes: 60, sessionCount: 6, pricePence: 25000 },
+];
