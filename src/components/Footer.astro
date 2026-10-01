@@ -15,7 +15,7 @@ const year = new Date(Date.now()).getFullYear();
           href={business.social.instagram}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-sm font-medium text-brand-blush hover:text-brand-cream"
+          class="text-sm font-medium text-brand-cream hover:opacity-70"
         >
           Instagram
         </a>
@@ -23,7 +23,7 @@ const year = new Date(Date.now()).getFullYear();
           href={business.social.facebook}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-sm font-medium text-brand-blush hover:text-brand-cream"
+          class="text-sm font-medium text-brand-cream hover:opacity-70"
         >
           Facebook
         </a>
@@ -31,7 +31,7 @@ const year = new Date(Date.now()).getFullYear();
           href={business.social.tiktok}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-sm font-medium text-brand-blush hover:text-brand-cream"
+          class="text-sm font-medium text-brand-cream hover:opacity-70"
         >
           TikTok
         </a>
@@ -39,7 +39,7 @@ const year = new Date(Date.now()).getFullYear();
     </div>
 
     <div>
-      <p class="text-sm font-semibold tracking-wide uppercase text-brand-blush">Explore</p>
+      <p class="text-sm font-semibold tracking-wide uppercase text-brand-cream">Explore</p>
       <ul class="mt-3 space-y-2">
         {
           nav.map((item) => (
@@ -54,7 +54,7 @@ const year = new Date(Date.now()).getFullYear();
     </div>
 
     <div>
-      <p class="text-sm font-semibold tracking-wide uppercase text-brand-blush">Contact</p>
+      <p class="text-sm font-semibold tracking-wide uppercase text-brand-cream">Contact</p>
       <ul class="mt-3 space-y-2 text-sm text-brand-sage-light">
         <li><a href={business.phoneHref} class="hover:text-brand-cream">{business.phoneDisplay}</a></li>
         <li><a href={`mailto:${business.email}`} class="hover:text-brand-cream">{business.email}</a></li>

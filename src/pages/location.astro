@@ -1,9 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { business } from '../data/site';
+import { getCoordinatesForAddress } from '../lib/geocode.server';
 
 const fullAddress = `${business.address.line1}, ${business.address.line2}, ${business.address.locality}, ${business.address.postcode}`;
-const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}&output=embed`;
+
+// Geocoded by postcode — the street/estate name alone doesn't resolve via
+// Nominatim, but the postcode does and is precise enough for a small UK
+// postcode. See src/lib/geocode.server.ts for the fallback if this fails.
+const { lat, lon } = await getCoordinatesForAddress(business.address.postcode);
+const delta = { lat: 0.003, lon: 0.004 };
+const mapEmbedSrc =
+  `https://www.openstreetmap.org/export/embed.html` +
+  `?bbox=${lon - delta.lon}%2C${lat - delta.lat}%2C${lon + delta.lon}%2C${lat + delta.lat}` +
+  `&layer=mapnik&marker=${lat}%2C${lon}`;
+const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(fullAddress)}`;
 ---
 
 <BaseLayout
@@ -48,13 +59,23 @@ const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(fullAddr
         </table>
       </div>
 
-      <div class="overflow-hidden rounded-2xl border border-brand-sage/30">
-        <iframe
-          src={mapEmbedSrc}
-          class="h-full min-h-[400px] w-full"
-          loading="lazy"
-          title={`Map showing ${business.name} at ${fullAddress}`}
-        ></iframe>
+      <div>
+        <div class="overflow-hidden rounded-2xl border border-brand-sage/30">
+          <iframe
+            src={mapEmbedSrc}
+            class="h-full min-h-[400px] w-full"
+            loading="lazy"
+            title={`Map showing ${business.name} at ${fullAddress}`}
+          ></iframe>
+        </div>
+        <a
+          href={directionsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="mt-4 inline-block rounded-full bg-brand-forest px-6 py-2.5 text-sm font-semibold tracking-wide text-brand-cream uppercase hover:bg-brand-forest-dark"
+        >
+          Get directions
+        </a>
       </div>
     </div>
   </section>
