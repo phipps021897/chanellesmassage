@@ -10,18 +10,18 @@ import { withBase } from '../lib/url';
 const services = (await getServicesForBuild()).slice(0, 3);
 ---
 
-<BaseLayout title="Relaxation & Deep Tissue Massage in Weymouth">
+<BaseLayout title="Sports Massage Therapy in Weymouth">
   <LocalBusinessSchema />
 
   <section class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-16 md:grid-cols-2 md:py-24">
     <div>
       <p class="placeholder-flag mb-4">Weymouth, Dorset</p>
       <h1 class="font-display text-4xl leading-tight font-semibold text-brand-forest md:text-6xl">
-        Find your calm at {business.name}
+        {business.tagline} with {business.name}
       </h1>
       <p class="mt-6 text-lg text-brand-ink/80">
-        {business.tagline}. Professional, tailored massage therapy in a warm, welcoming space —
-        book online in minutes.
+        Professional, tailored sports massage to support recovery, mobility and injury prevention
+        — book online in minutes.
       </p>
       <div class="mt-8 flex flex-wrap gap-4">
         <a
@@ -67,7 +67,7 @@ const services = (await getServicesForBuild()).slice(0, 3);
   </section>
 
   <section class="mx-auto max-w-6xl px-6 py-16 text-center">
-    <h2 class="font-display text-3xl font-semibold text-brand-forest">Ready to relax?</h2>
+    <h2 class="font-display text-3xl font-semibold text-brand-forest">Ready to book?</h2>
     <p class="mx-auto mt-4 max-w-xl text-brand-ink/70">
       Book your appointment online, or get in touch if you have any questions about which
       treatment is right for you.

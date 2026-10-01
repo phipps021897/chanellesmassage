@@ -1,29 +1,41 @@
 # Content checklist — replace before launch
 
-Everything below is placeholder, invented to demonstrate the site's structure since Instagram's
-login wall blocked automated access to the real bio/photos/prices. Nothing here is real contact
-info — do not let it go live as-is.
-
 ## Business info — [src/data/site.ts](src/data/site.ts)
 
-- [ ] `phoneDisplay` / `phoneHref` — real phone number
-- [ ] `email` — real contact email (currently `hello@example.com`, an intentionally fake
-      placeholder domain)
-- [ ] `address` — real studio address and postcode
-- [ ] `hours` — confirm real opening hours (should match the `business_hours` table in Supabase
-      once that's set up — see below)
+- [x] Phone, email, address, Instagram/Facebook/TikTok — real details added
+- [ ] `hours` — confirm real opening hours with Chanelle (currently a reasonable guess; should
+      match the `business_hours` table in Supabase once that's set up — see below)
 
 ## Bio — [src/pages/about.astro](src/pages/about.astro)
 
-- [ ] Chanelle's real bio, qualifications/certifications, years of experience
+- [ ] Chanelle's real bio, qualifications/certifications, years of experience (currently generic
+      "qualified sports massage therapist" placeholder text — positioning is now correct, i.e.
+      sports massage rather than general relaxation/spa, based on the real price list, but the
+      specifics are still invented)
 - [ ] "My approach" section — real philosophy/values statement
 - [ ] Real photo of Chanelle (replace the `<PlaceholderPhoto>`)
 
 ## Services & prices — Supabase `services` table (or [src/data/services.ts](src/data/services.ts) as a fallback)
 
-- [ ] Real treatment names, descriptions, durations and prices — either edit directly in the
-      `/admin/` dashboard once Supabase is set up (recommended), or edit the fallback list in
-      `src/data/services.ts`
+- [x] The 4 single-session options are real and wired in:
+  - Sports Massage — 30 min — £25
+  - Sports Massage — 60 min — £45
+  - Sports Massage & Consultation — 30 min — £30
+  - Sports Massage & Consultation — 60 min — £50
+- [ ] **Still need a decision on the session-card packages** (not yet added anywhere):
+  - 3-session card, 30 min — £70
+  - 3-session card, 60 min — £125
+  - 6-session card, 30 min — £130
+  - 6-session card, 60 min — £250
+  - These are prepaid bundles of *future* sessions, not single bookable appointments — the
+    current booking system only handles one-off appointments, so "booking" a session card
+    wouldn't make sense through the online calendar as-is. Options: (a) list them on the Services
+    page as informational pricing only ("ask in person to purchase a session card"), or (b) build
+    proper credit tracking (a customer's remaining session balance, redeemed against future
+    bookings) — a meaningfully bigger feature. Ask Claude to scope this once a decision is made.
+- [ ] Once Supabase is live, add these via the `/admin/` dashboard (recommended, since that's the
+      source of truth the live Services page reads from) rather than only editing the fallback
+      file
 
 ## Photos — [src/pages/gallery.astro](src/pages/gallery.astro)
 
@@ -35,10 +47,9 @@ info — do not let it go live as-is.
 
 ## Location — [src/pages/location.astro](src/pages/location.astro)
 
-- [ ] Real address (also update `src/data/site.ts`)
-- [ ] Real parking / public transport / accessibility directions
-- [ ] Once the real address is known, replace the generic Weymouth-centre OpenStreetMap embed
-      with a proper Google Maps embed for that exact address (Google Maps > Share > Embed a map)
+- [x] Real address wired in (5 Avon Close, Granby Industrial Estate, Weymouth, DT4 9UX), with a
+      proper Google Maps embed for that exact address
+- [ ] Real parking / public transport / accessibility directions — still placeholder bullet points
 
 ## Branding
 

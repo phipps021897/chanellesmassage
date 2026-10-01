@@ -13,62 +13,51 @@ export interface Service {
 // Supabase) until the real price list is confirmed. Once Supabase is
 // connected, `src/lib/services.server.ts` fetches the live list at build
 // time and this fallback is only used if that fetch fails or hasn't been
-// configured yet. TODO: confirm real service names, durations and prices.
+// configured yet.
 export const placeholderServices: Service[] = [
   {
-    id: 'placeholder-swedish-60',
-    slug: 'relaxation-massage-60',
-    name: 'Relaxation (Swedish) Massage — 60 min',
+    id: 'placeholder-sports-30',
+    slug: 'sports-massage-30',
+    name: 'Sports Massage — 30 min',
     description:
-      'A gentle, flowing full-body massage designed to ease tension, calm the nervous system and leave you feeling restored.',
-    durationMinutes: 60,
-    pricePence: 5500,
+      'A focused sports massage session to ease muscle tension, support recovery and improve mobility.',
+    durationMinutes: 30,
+    pricePence: 2500,
     isActive: true,
     sortOrder: 1,
   },
   {
-    id: 'placeholder-deep-tissue-60',
-    slug: 'deep-tissue-massage-60',
-    name: 'Deep Tissue Massage — 60 min',
+    id: 'placeholder-sports-60',
+    slug: 'sports-massage-60',
+    name: 'Sports Massage — 60 min',
     description:
-      'Firmer pressure targeting chronic muscle tension and knots, ideal if you carry stress in your shoulders, neck or back.',
+      'A full sports massage treatment for deeper, more thorough work on problem areas and recovery.',
     durationMinutes: 60,
-    pricePence: 6000,
+    pricePence: 4500,
     isActive: true,
     sortOrder: 2,
   },
   {
-    id: 'placeholder-back-neck-shoulder-30',
-    slug: 'back-neck-shoulder-30',
-    name: 'Back, Neck & Shoulder Massage — 30 min',
+    id: 'placeholder-sports-consult-30',
+    slug: 'sports-massage-consultation-30',
+    name: 'Sports Massage & Consultation — 30 min',
     description:
-      'A focused treatment on the areas that hold the most tension — perfect for a lunch break reset.',
+      'Includes a consultation to assess your needs and goals alongside a 30-minute sports massage — ideal for a first visit.',
     durationMinutes: 30,
-    pricePence: 3500,
+    pricePence: 3000,
     isActive: true,
     sortOrder: 3,
   },
   {
-    id: 'placeholder-sports-90',
-    slug: 'sports-massage-90',
-    name: 'Sports Massage — 90 min',
+    id: 'placeholder-sports-consult-60',
+    slug: 'sports-massage-consultation-60',
+    name: 'Sports Massage & Consultation — 60 min',
     description:
-      'A deeper, targeted treatment for active clients — supports recovery, mobility and injury prevention.',
-    durationMinutes: 90,
-    pricePence: 8000,
+      'A full consultation plus a 60-minute sports massage treatment, tailored to your training or recovery needs.',
+    durationMinutes: 60,
+    pricePence: 5000,
     isActive: true,
     sortOrder: 4,
-  },
-  {
-    id: 'placeholder-hot-stone-75',
-    slug: 'hot-stone-massage-75',
-    name: 'Hot Stone Massage — 75 min',
-    description:
-      'Warmed basalt stones combined with massage strokes to melt away tension and deeply relax the body.',
-    durationMinutes: 75,
-    pricePence: 7000,
-    isActive: true,
-    sortOrder: 5,
   },
 ];
 

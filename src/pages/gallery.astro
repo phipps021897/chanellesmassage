@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderPhoto from '../components/PlaceholderPhoto.astro';
+import { business } from '../data/site';
 
 const placeholders = [
   'Treatment room',
@@ -24,8 +25,15 @@ const placeholders = [
            <img src="/images/gallery/your-file.jpg" alt="..." loading="lazy" /> -->
       A few glimpses of the studio and treatments on offer. Real photos coming soon — follow
       along on{' '}
-      <a href="https://www.instagram.com/chanellesmassage" class="font-semibold underline underline-offset-4">
+      <a href={business.social.instagram} class="font-semibold underline underline-offset-4">
         Instagram
+      </a>,{' '}
+      <a href={business.social.facebook} class="font-semibold underline underline-offset-4">
+        Facebook
+      </a>{' '}
+      or{' '}
+      <a href={business.social.tiktok} class="font-semibold underline underline-offset-4">
+        TikTok
       </a>{' '}
       for the latest.
     </p>

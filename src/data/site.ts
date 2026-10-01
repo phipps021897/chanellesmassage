@@ -5,23 +5,21 @@
 export const business = {
   name: "Chanelle's Massage",
   shortName: "Chanelle's",
-  tagline: 'Relaxation & Deep Tissue Massage Therapy in Weymouth',
+  tagline: 'Sports Massage Therapy in Weymouth',
   metaDescription:
-    'Chanelle’s Massage offers professional relaxation, deep tissue and sports massage therapy in Weymouth, Dorset. Book your appointment online today.',
+    'Chanelle’s Massage offers professional sports massage therapy in Weymouth, Dorset — supporting recovery, mobility and injury prevention. Book your appointment online today.',
 
-  // TODO: replace with the real phone number
-  phoneDisplay: '01305 XXX XXX',
-  phoneHref: 'tel:+441305000000',
+  phoneDisplay: '07435 617414',
+  phoneHref: 'tel:+447435617414',
 
-  // TODO: replace with the real contact email (example.com is a placeholder domain)
-  email: 'hello@example.com',
+  email: 'chanellesmassage@gmail.com',
 
-  // TODO: replace with the real studio address
   address: {
-    line1: 'Add your studio address',
-    line2: 'Weymouth',
+    line1: '5 Avon Close',
+    line2: 'Granby Industrial Estate',
+    locality: 'Weymouth',
     region: 'Dorset',
-    postcode: 'DTx xxx',
+    postcode: 'DT4 9UX',
     country: 'United Kingdom',
   },
 
@@ -29,6 +27,8 @@ export const business = {
 
   social: {
     instagram: 'https://www.instagram.com/chanellesmassage',
+    facebook: 'https://www.facebook.com/chanellesmassage',
+    tiktok: 'https://www.tiktok.com/@chanellesmassage',
   },
 
   // TODO: confirm real opening hours with Chanelle — these mirror the

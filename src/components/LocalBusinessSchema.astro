@@ -20,8 +20,8 @@ const schema = {
   email: business.email,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: business.address.line1,
-    addressLocality: business.address.line2,
+    streetAddress: `${business.address.line1}, ${business.address.line2}`,
+    addressLocality: business.address.locality,
     addressRegion: business.address.region,
     postalCode: business.address.postcode,
     addressCountry: 'GB',
