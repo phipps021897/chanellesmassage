@@ -198,7 +198,7 @@ export default function BookingWidget() {
   }
 
   return (
-    <div className="rounded-3xl border border-brand-sage/30 bg-white p-6 shadow-sm sm:p-10">
+    <div className="rounded-3xl border border-brand-sage/30 bg-brand-sage-light p-6 shadow-sm sm:p-10">
       <ol className="mb-8 flex flex-wrap gap-2 text-xs font-semibold tracking-wide text-brand-ink/50 uppercase">
         <li className={step === 'service' ? 'text-brand-forest' : ''}>1. Service</li>
         <span>&rarr;</span>

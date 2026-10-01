@@ -2,17 +2,22 @@
 
 @theme {
   --font-display: "Cormorant Garamond", "Georgia", serif;
+  --font-script: "Alex Brush", "Brush Script MT", cursive;
   --font-body: "Work Sans", "Helvetica Neue", Arial, sans-serif;
 
-  --color-brand-forest: #2f4739;
-  --color-brand-forest-dark: #1e2f26;
-  --color-brand-sage: #7c9885;
-  --color-brand-sage-light: #dbe6de;
-  --color-brand-blush: #e8c4b8;
-  --color-brand-blush-dark: #d9a794;
-  --color-brand-cream: #fbf6ef;
-  --color-brand-gold: #b08d57;
-  --color-brand-ink: #26302b;
+  /* Black + gold palette, matching the Chanelle's Massage logo. Token names
+     kept from the original build (forest/sage/blush/cream/ink) so every
+     page that references them re-themes automatically — only the values
+     changed, mapped by role (see CONTENT-CHECKLIST.md for the audit). */
+  --color-brand-forest: #d4af37; /* primary gold — headings, primary buttons, focus rings */
+  --color-brand-forest-dark: #b3922a; /* primary button hover */
+  --color-brand-sage: #4a3c24; /* warm bronze — subtle borders/dividers on black */
+  --color-brand-sage-light: #1a160e; /* card/section surface — slightly lighter than page bg */
+  --color-brand-blush: #e3b659; /* warm amber — footer labels, decorative accents, alerts */
+  --color-brand-blush-dark: #c99a3f;
+  --color-brand-cream: #0b0906; /* page + header background — near-black */
+  --color-brand-gold: #caa24a; /* secondary gold — price highlights, active nav, badges */
+  --color-brand-ink: #e8dfc9; /* body text — warm ivory, used at various opacities */
 }
 
 html {
@@ -31,6 +36,10 @@ h3,
 h4,
 .font-display {
   font-family: var(--font-display);
+}
+
+.font-script {
+  font-family: var(--font-script);
 }
 
 .placeholder-flag {

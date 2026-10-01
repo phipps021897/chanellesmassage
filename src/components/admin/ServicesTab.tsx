@@ -104,7 +104,7 @@ export default function ServicesTab({ supabase }: { supabase: SupabaseClient }) 
 
       <div className="grid gap-3">
         {services.map((s) => (
-          <div key={s.id} className="rounded-xl border border-brand-sage/30 bg-white p-4">
+          <div key={s.id} className="rounded-xl border border-brand-sage/30 bg-brand-sage-light p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
               <div>
                 <p className="font-semibold text-brand-forest">{s.name}</p>

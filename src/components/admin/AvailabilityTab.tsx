@@ -81,7 +81,7 @@ export default function AvailabilityTab({ supabase }: { supabase: SupabaseClient
           {hours.map((row) => (
             <div
               key={row.day_of_week}
-              className="flex flex-wrap items-center gap-3 rounded-xl border border-brand-sage/30 bg-white p-3"
+              className="flex flex-wrap items-center gap-3 rounded-xl border border-brand-sage/30 bg-brand-sage-light p-3"
             >
               <span className="w-24 font-medium">{DAY_NAMES[row.day_of_week]}</span>
               <label className="flex items-center gap-2 text-sm">
@@ -121,7 +121,7 @@ export default function AvailabilityTab({ supabase }: { supabase: SupabaseClient
           {blocked.map((b) => (
             <div
               key={b.id}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-sage/30 bg-white p-3 text-sm"
+              className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-brand-sage/30 bg-brand-sage-light p-3 text-sm"
             >
               <span>
                 {new Date(b.start_at).toLocaleString('en-GB')} &rarr; {new Date(b.end_at).toLocaleString('en-GB')}

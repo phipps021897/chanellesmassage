@@ -42,11 +42,16 @@ info — do not let it go live as-is.
 
 ## Branding
 
-- [ ] The colour palette (`src/styles/global.css`), fonts (Cormorant Garamond + Work Sans, set in
-      `src/layouts/BaseLayout.astro`) and favicon (`public/favicon.svg`) are a tasteful placeholder
-      spa palette — swap in Chanelle's real brand colours/logo/fonts if she has them
-- [ ] `og:image` — no social-share preview image is set yet; add one for nicer link previews when
-      the site is shared on social media
+- [x] Colour palette (black + gold, `src/styles/global.css`) and typography (Alex Brush script
+      wordmark + Cormorant Garamond headings, set in `src/layouts/BaseLayout.astro`) now match the
+      real Chanelle's Massage logo
+- [ ] **Add the real logo file** — drop it at `public/images/logo.png` (or `.svg`), then:
+  - Swap the text wordmark in `src/components/Header.astro` and `src/components/Footer.astro` for
+    `<img src={withBase('images/logo.png')} alt="Chanelle's Massage" class="h-12" />`
+  - Rebuild `public/favicon.svg` from the logo's circular mark for pixel-accurate browser tabs
+    (current one is a simplified gold-ring placeholder in the same style)
+- [ ] `og:image` — no social-share preview image is set yet; a cropped/square version of the logo
+      on black would work well for link previews when the site is shared on social media
 
 ## Legal
 

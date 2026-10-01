@@ -47,7 +47,7 @@ const services = (await getServicesForBuild()).slice(0, 3);
       <div class="mt-8 grid gap-6 md:grid-cols-3">
         {
           services.map((service) => (
-            <div class="rounded-2xl bg-white p-6 shadow-sm">
+            <div class="rounded-2xl bg-brand-sage-light p-6 shadow-sm">
               <h3 class="font-display text-xl font-semibold text-brand-forest">{service.name}</h3>
               <p class="mt-2 text-sm text-brand-ink/70">{service.description}</p>
               <p class="mt-4 font-semibold text-brand-gold">

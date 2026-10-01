@@ -21,7 +21,7 @@ export default function LoginForm({ supabase }: { supabase: SupabaseClient }) {
   }
 
   return (
-    <div className="mx-auto mt-16 max-w-sm rounded-2xl border border-brand-sage/30 bg-white p-8 shadow-sm">
+    <div className="mx-auto mt-16 max-w-sm rounded-2xl border border-brand-sage/30 bg-brand-sage-light p-8 shadow-sm">
       <h1 className="font-display text-2xl font-semibold text-brand-forest">Admin sign in</h1>
       <p className="mt-1 text-sm text-brand-ink/60">Manage bookings, services and availability.</p>
 
