@@ -45,8 +45,8 @@ able to book that far ahead). To activate it:
 
 - [x] 3 real photos added (treatment room, back massage, leg massage) — the best one (natural
       light, full scene) is also used as the homepage hero
-- [ ] Still placeholder: Reception/waiting area, Product/oils detail shot, Exterior/signage —
-      same swap pattern as above once more photos are available
+- [ ] Gallery shows the 3 real photos plus a single "More photos coming soon" tile — swap it for
+      a 4th real `<img>` the same way once another photo is available (see `items` array)
 - [ ] About page photo of Chanelle herself still placeholder (none of the 3 provided are a clean
       solo portrait)
 
