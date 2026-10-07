@@ -2,14 +2,19 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PlaceholderPhoto from '../components/PlaceholderPhoto.astro';
 import { business } from '../data/site';
+import { withBase } from '../lib/url';
 
-const placeholders = [
-  'Treatment room',
-  'Reception / waiting area',
-  'Massage in progress (with client consent)',
-  'Product / oils detail shot',
-  'Exterior / signage',
-  'Chanelle at work',
+type GalleryItem =
+  | { photo: string; alt: string; placeholder?: never }
+  | { placeholder: string; photo?: never; alt?: never };
+
+const items: GalleryItem[] = [
+  { photo: 'treatment-room.jpg', alt: "Treatment room at Chanelle's Massage" },
+  { placeholder: 'Reception / waiting area' },
+  { photo: 'massage-back-window.jpg', alt: 'Sports massage treatment in progress' },
+  { placeholder: 'Product / oils detail shot' },
+  { placeholder: 'Exterior / signage' },
+  { photo: 'massage-leg.jpg', alt: 'Chanelle performing a sports massage treatment' },
 ];
 ---
 
@@ -20,11 +25,7 @@ const placeholders = [
   <section class="mx-auto max-w-6xl px-6 py-16">
     <h1 class="font-display text-4xl font-semibold text-brand-forest">Gallery</h1>
     <p class="mt-4 max-w-2xl text-brand-ink/70">
-      <!-- TODO: replace every tile below with a real photo. Drop images into
-           public/images/gallery/ and swap each <PlaceholderPhoto> for a plain
-           <img src="/images/gallery/your-file.jpg" alt="..." loading="lazy" /> -->
-      A few glimpses of the studio and treatments on offer. Real photos coming soon — follow
-      along on{' '}
+      A few glimpses of the studio and treatments on offer. Follow along on{' '}
       <a href={business.social.instagram} class="font-semibold underline underline-offset-4">
         Instagram
       </a>,{' '}
@@ -39,7 +40,20 @@ const placeholders = [
     </p>
 
     <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {placeholders.map((label) => <PlaceholderPhoto label={label} />)}
+      {
+        items.map((item) =>
+          item.photo ? (
+            <img
+              src={withBase(`images/gallery/${item.photo}`)}
+              alt={item.alt}
+              loading="lazy"
+              class="aspect-4/3 w-full rounded-2xl border border-brand-sage/30 object-cover"
+            />
+          ) : (
+            <PlaceholderPhoto label={item.placeholder as string} />
+          )
+        )
+      }
     </div>
   </section>
 </BaseLayout>

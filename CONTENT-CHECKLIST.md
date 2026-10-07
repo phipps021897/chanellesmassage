@@ -31,16 +31,17 @@
 
 ## Photos — [src/pages/gallery.astro](src/pages/gallery.astro)
 
-- [ ] Replace every `<PlaceholderPhoto>` tile with a real photo:
-  1. Add image files to `public/images/gallery/`
-  2. Swap `<PlaceholderPhoto label="..." />` for `<img src={withBase('images/gallery/your-file.jpg')} alt="..." loading="lazy" class="rounded-2xl object-cover" />`
-- [ ] Also replace the hero photo on the homepage (`src/pages/index.astro`) and the About page
-      photo the same way
+- [x] 3 real photos added (treatment room, back massage, leg massage) — the best one (natural
+      light, full scene) is also used as the homepage hero
+- [ ] Still placeholder: Reception/waiting area, Product/oils detail shot, Exterior/signage —
+      same swap pattern as above once more photos are available
+- [ ] About page photo of Chanelle herself still placeholder (none of the 3 provided are a clean
+      solo portrait)
 
 ## Location — [src/pages/location.astro](src/pages/location.astro)
 
-- [x] Real address wired in (5 Avon Close, Granby Industrial Estate, Weymouth, DT4 9UX), with an
-      OpenStreetMap embed geocoded to that exact postcode plus a "Get Directions" link
+- [x] Real address wired in (5 Avon Close, Granby Industrial Estate, Weymouth, DT4 9UX), with a
+      Google Maps embed for that exact address plus a "Get Directions" link
 
 ## Branding
 

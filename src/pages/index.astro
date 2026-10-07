@@ -1,7 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import LocalBusinessSchema from '../components/LocalBusinessSchema.astro';
-import PlaceholderPhoto from '../components/PlaceholderPhoto.astro';
 import { business } from '../data/site';
 import { getServicesForBuild } from '../lib/services.server';
 import { formatPrice } from '../data/services';
@@ -38,7 +37,11 @@ const services = (await getServicesForBuild()).slice(0, 3);
         </a>
       </div>
     </div>
-    <PlaceholderPhoto label="Studio / treatment room hero photo" class="aspect-square" />
+    <img
+      src={withBase('images/gallery/massage-back-window.jpg')}
+      alt="Sports massage treatment in progress at Chanelle's Massage"
+      class="aspect-square w-full rounded-3xl border border-brand-sage/30 object-cover"
+    />
   </section>
 
   <section class="bg-brand-sage-light/40 py-16">
