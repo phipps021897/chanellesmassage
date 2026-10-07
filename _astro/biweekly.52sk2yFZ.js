@@ -1,0 +1,1 @@
+var e=`2026-10-12`;function t(e){let t=new Date(e);return t.setHours(0,0,0,0),t}function n(n,r=e){let i=t(new Date(`${r}T00:00:00`));return t(n).getTime()>=i.getTime()}function r(n,r=e){let i=t(new Date(`${r}T00:00:00`)),a=t(n),o=Math.round((a.getTime()-i.getTime())/864e5);return(Math.floor(o/7)%2+2)%2==0?1:2}export{r as n,n as r,e as t};

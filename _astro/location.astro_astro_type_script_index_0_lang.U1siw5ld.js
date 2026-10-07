@@ -1,0 +1,1 @@
+import{n as e,r as t}from"./biweekly.52sk2yFZ.js";var n=new Date;if(t(n)){document.querySelectorAll(`[data-legacy-block]`).forEach(e=>{e.style.display=`none`});let t=e(n);document.querySelectorAll(`[data-week-label]`).forEach(e=>{e.getAttribute(`data-week-label`)===String(t)&&(e.textContent+=` (this week)`)})}
