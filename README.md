@@ -22,8 +22,11 @@ The booking form and admin dashboard need a Supabase project (free tier is plent
 
 1. Create a project at [supabase.com](https://supabase.com).
 2. Open **SQL Editor > New query**, paste in the contents of [`supabase/schema.sql`](./supabase/schema.sql),
-   and run it. This creates the `services`, `business_hours`, `blocked_slots` and `bookings`
-   tables, plus the row-level security policies that keep customer data private.
+   and run it. This creates the `services`, `business_hours`, `biweekly_hours`, `blocked_slots`
+   and `bookings` tables, plus the row-level security policies that keep customer data private.
+   **This file is safe to re-run any time it changes** (e.g. after the biweekly hours were added)
+   — every statement in it is idempotent, so re-running it just adds/updates what's new without
+   touching existing data.
 3. Go to **Authentication > Sign In / Providers** and turn **off** "Allow new users to sign up" —
    there's no public sign-up page in this app, so this stops anyone else self-registering.
 4. Go to **Authentication > Users > Add user** and create the one admin account (Chanelle's email
@@ -77,6 +80,18 @@ npm run dev            # http://localhost:4321/chanellesmassage/
   dashboard — otherwise it falls back to `src/data/services.ts`. **Re-run the deploy workflow
   (Actions tab > Deploy to GitHub Pages > Run workflow) after changing prices in the admin
   dashboard** so this static page picks up the change.
+
+### Alternating fortnightly hours
+
+Chanelle's hours alternate between two schedules every other week ("Week 1" / "Week 2"), starting
+from a fixed anchor Monday set in `BIWEEKLY_ANCHOR_DATE` (`src/lib/biweekly.ts`). Before that date,
+the old single-week `business_hours` schedule still applies. Both weeks' hours live in the
+`biweekly_hours` Supabase table and are editable in **Admin > Availability**, same as the legacy
+hours. To change the anchor date or start a new biweekly schedule later, update
+`BIWEEKLY_ANCHOR_DATE` and the seed values in `supabase/schema.sql`, then update
+`src/data/site.ts`'s `week1Hours`/`week2Hours` to match (used for the static Location page
+display, which can't read Supabase live — see the `taken_slots`-style build-time fetch pattern in
+`src/lib/services.server.ts` if this needs to become dynamic too).
 
 ### Adding email notifications later
 

@@ -1,15 +1,11 @@
 ---
 import { business } from '../data/site';
 
-const openingHoursSpecification = business.hours
-  .filter((h) => h.open && h.close)
-  .map((h) => ({
-    '@type': 'OpeningHoursSpecification',
-    dayOfWeek: h.day,
-    opens: h.open,
-    closes: h.close,
-  }));
-
+// Hours alternate fortnightly (see src/lib/biweekly.ts), which schema.org's
+// OpeningHoursSpecification has no clean way to express as a repeating
+// pattern — encoding just one week would tell search engines the wrong
+// hours half the time, so it's omitted rather than published incorrectly.
+// The Location page shows both weeks to actual visitors instead.
 const schema = {
   '@context': 'https://schema.org',
   '@type': 'HealthAndBeautyBusiness',
@@ -28,7 +24,6 @@ const schema = {
     addressCountry: 'GB',
   },
   sameAs: [business.social.instagram, business.social.facebook, business.social.tiktok],
-  openingHoursSpecification,
 };
 ---
 

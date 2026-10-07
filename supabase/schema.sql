@@ -84,6 +84,59 @@ values
 on conflict (day_of_week) do nothing;
 
 -- ---------------------------------------------------------------------------
+-- biweekly_hours — alternating Week 1 / Week 2 schedule, in effect from the
+-- anchor date in src/lib/biweekly.ts (12 Oct 2026) onward. Before that date,
+-- `business_hours` above still applies. See src/lib/availability.ts for how
+-- the two are combined.
+-- ---------------------------------------------------------------------------
+create table if not exists public.biweekly_hours (
+  day_of_week int not null check (day_of_week between 0 and 6),
+  week_number int not null check (week_number in (1, 2)),
+  start_time time not null default '09:00',
+  end_time time not null default '17:00',
+  is_closed boolean not null default false,
+  primary key (day_of_week, week_number)
+);
+
+alter table public.biweekly_hours enable row level security;
+
+drop policy if exists "public can read biweekly hours" on public.biweekly_hours;
+create policy "public can read biweekly hours"
+  on public.biweekly_hours for select
+  to anon, authenticated
+  using (true);
+
+drop policy if exists "admin can manage biweekly hours" on public.biweekly_hours;
+create policy "admin can manage biweekly hours"
+  on public.biweekly_hours for all
+  to authenticated
+  using (true)
+  with check (true);
+
+insert into public.biweekly_hours (day_of_week, week_number, start_time, end_time, is_closed)
+values
+  -- Week 1 (starting Mon 12 Oct 2026)
+  (1, 1, '08:00', '18:00', false), -- Monday 8am-6pm
+  (2, 1, '18:00', '21:00', false), -- Tuesday 6-9pm
+  (3, 1, '18:00', '21:00', false), -- Wednesday 6-9pm
+  (4, 1, '09:00', '17:00', true),  -- Thursday closed
+  (5, 1, '18:00', '21:00', false), -- Friday 6-9pm
+  (6, 1, '18:00', '21:00', false), -- Saturday 6-9pm
+  (0, 1, '08:00', '11:00', false), -- Sunday 8-11am
+  -- Week 2 (starting Mon 19 Oct 2026)
+  (1, 2, '08:00', '18:00', false), -- Monday 8am-6pm
+  (2, 2, '08:00', '16:00', false), -- Tuesday 8am-4pm
+  (3, 2, '07:30', '09:30', false), -- Wednesday 7:30-9:30am
+  (4, 2, '09:00', '17:00', true),  -- Thursday closed
+  (5, 2, '07:30', '09:30', false), -- Friday 7:30-9:30am
+  (6, 2, '07:30', '09:30', false), -- Saturday 7:30-9:30am
+  (0, 2, '09:00', '17:00', true)   -- Sunday closed
+on conflict (day_of_week, week_number) do update set
+  start_time = excluded.start_time,
+  end_time = excluded.end_time,
+  is_closed = excluded.is_closed;
+
+-- ---------------------------------------------------------------------------
 -- blocked_slots — one-off closures (holidays, personal time off, etc.)
 -- ---------------------------------------------------------------------------
 create table if not exists public.blocked_slots (

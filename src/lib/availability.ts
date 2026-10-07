@@ -1,8 +1,14 @@
+import { getWeekNumberForDate, isOnOrAfterAnchor } from './biweekly';
+
 export interface BusinessHourRow {
   day_of_week: number; // 0 = Sunday .. 6 = Saturday
   start_time: string; // "09:00:00"
   end_time: string; // "17:00:00"
   is_closed: boolean;
+}
+
+export interface BiweeklyHourRow extends BusinessHourRow {
+  week_number: 1 | 2;
 }
 
 export interface BlockedSlotRow {
@@ -31,27 +37,37 @@ function overlaps(aStart: Date, aEnd: Date, bStart: Date, bEnd: Date): boolean {
 
 /**
  * Computes bookable start times for a given calendar date and service
- * duration, given the weekly business hours plus any blocked slots / already
+ * duration. Hours come from `legacyHours` (the old single-week schedule) for
+ * dates before the biweekly anchor, or from `biweeklyHours` (filtered to
+ * Week 1 or Week 2, whichever applies to `date`) from the anchor onward —
+ * see src/lib/biweekly.ts. Also accounts for any blocked slots / already
  * taken slots. Returns a list of Date objects (slot start times), in the
  * business's local time as constructed from the browser's local timezone.
  */
 export function computeAvailableSlots({
   date,
   durationMinutes,
-  businessHours,
+  legacyHours,
+  biweeklyHours,
   blockedSlots,
   takenSlots,
   now = new Date(),
 }: {
   date: Date;
   durationMinutes: number;
-  businessHours: BusinessHourRow[];
+  legacyHours: BusinessHourRow[];
+  biweeklyHours: BiweeklyHourRow[];
   blockedSlots: BlockedSlotRow[];
   takenSlots: TakenSlotRow[];
   now?: Date;
 }): Date[] {
   const dayOfWeek = date.getDay();
-  const hoursForDay = businessHours.find((h) => h.day_of_week === dayOfWeek);
+
+  const hoursForDay = isOnOrAfterAnchor(date)
+    ? biweeklyHours.find(
+        (h) => h.day_of_week === dayOfWeek && h.week_number === getWeekNumberForDate(date)
+      )
+    : legacyHours.find((h) => h.day_of_week === dayOfWeek);
 
   if (!hoursForDay || hoursForDay.is_closed) return [];
 

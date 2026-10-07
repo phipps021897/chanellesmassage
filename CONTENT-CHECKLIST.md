@@ -3,8 +3,20 @@
 ## Business info — [src/data/site.ts](src/data/site.ts)
 
 - [x] Phone, email, address, Instagram/Facebook/TikTok — real details added
-- [ ] `hours` — confirm real opening hours with Chanelle (currently a reasonable guess; should
-      match the `business_hours` table in Supabase once that's set up — see below)
+- [x] Real alternating fortnightly hours added (Week 1 / Week 2, starting Mon 12 Oct 2026) — see
+      "Action needed" below to activate them
+
+## ⚠️ Action needed: run the updated Supabase schema
+
+The alternating-hours feature added a new `biweekly_hours` table that **does not exist yet** in
+the live Supabase project — until it's created, dates from 12 Oct 2026 onward will show no
+booking availability (the site degrades gracefully rather than erroring, but customers won't be
+able to book that far ahead). To activate it:
+
+1. Supabase dashboard → **SQL Editor** → **New query**
+2. Paste the full contents of [`supabase/schema.sql`](./supabase/schema.sql) and run it — safe to
+   re-run, it won't touch existing services/bookings/current hours
+3. Check **Admin → Availability** shows "Week 1" and "Week 2" sections with the right hours
 
 ## Bio — [src/pages/about.astro](src/pages/about.astro)
 

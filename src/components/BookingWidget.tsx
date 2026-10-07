@@ -3,6 +3,7 @@ import { getSupabaseClient } from '../lib/supabaseClient';
 import {
   computeAvailableSlots,
   type BusinessHourRow,
+  type BiweeklyHourRow,
   type BlockedSlotRow,
   type TakenSlotRow,
 } from '../lib/availability';
@@ -46,7 +47,8 @@ export default function BookingWidget() {
 
   const [step, setStep] = useState<Step>('service');
   const [services, setServices] = useState<Service[]>(placeholderServices);
-  const [businessHours, setBusinessHours] = useState<BusinessHourRow[]>([]);
+  const [legacyHours, setLegacyHours] = useState<BusinessHourRow[]>([]);
+  const [biweeklyHours, setBiweeklyHours] = useState<BiweeklyHourRow[]>([]);
   const [blockedSlots, setBlockedSlots] = useState<BlockedSlotRow[]>([]);
   const [takenSlots, setTakenSlots] = useState<TakenSlotRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -81,13 +83,16 @@ export default function BookingWidget() {
       const rangeEnd = new Date();
       rangeEnd.setDate(rangeEnd.getDate() + DAYS_AHEAD);
 
-      const [servicesRes, hoursRes, blockedRes, takenRes] = await Promise.all([
+      const [servicesRes, legacyHoursRes, biweeklyHoursRes, blockedRes, takenRes] = await Promise.all([
         supabase
           .from('services')
           .select('id, slug, name, description, duration_minutes, price_pence, is_active, sort_order')
           .eq('is_active', true)
           .order('sort_order', { ascending: true }),
         supabase.from('business_hours').select('day_of_week, start_time, end_time, is_closed'),
+        supabase
+          .from('biweekly_hours')
+          .select('day_of_week, week_number, start_time, end_time, is_closed'),
         supabase
           .from('blocked_slots')
           .select('start_at, end_at')
@@ -102,7 +107,13 @@ export default function BookingWidget() {
 
       if (cancelled) return;
 
-      if (servicesRes.error || hoursRes.error || blockedRes.error || takenRes.error) {
+      // biweeklyHoursRes is deliberately excluded from this check: the
+      // `biweekly_hours` table is a newer addition that may not exist yet in
+      // every deployment (see supabase/schema.sql). If it's missing, booking
+      // still works for near-term dates via the legacy schedule — only
+      // dates on/after the biweekly anchor would show no slots until the
+      // table is created.
+      if (servicesRes.error || legacyHoursRes.error || blockedRes.error || takenRes.error) {
         setLoadError('Something went wrong loading availability. Please try again shortly, or call/email to book.');
         setLoading(false);
         return;
@@ -111,7 +122,11 @@ export default function BookingWidget() {
       if (servicesRes.data && servicesRes.data.length > 0) {
         setServices(servicesRes.data.map(toRowService));
       }
-      setBusinessHours((hoursRes.data ?? []) as BusinessHourRow[]);
+      setLegacyHours((legacyHoursRes.data ?? []) as BusinessHourRow[]);
+      if (biweeklyHoursRes.error) {
+        console.warn('[chanellesmassage] biweekly_hours table not found yet — run the latest supabase/schema.sql.');
+      }
+      setBiweeklyHours((biweeklyHoursRes.data ?? []) as BiweeklyHourRow[]);
       setBlockedSlots((blockedRes.data ?? []) as BlockedSlotRow[]);
       setTakenSlots((takenRes.data ?? []) as TakenSlotRow[]);
       setLoading(false);
@@ -132,14 +147,15 @@ export default function BookingWidget() {
       const slots = computeAvailableSlots({
         date: day,
         durationMinutes: selectedService.durationMinutes,
-        businessHours,
+        legacyHours,
+        biweeklyHours,
         blockedSlots,
         takenSlots,
       });
       map.set(dateKey(day), slots);
     }
     return map;
-  }, [selectedService, businessHours, blockedSlots, takenSlots, days]);
+  }, [selectedService, legacyHours, biweeklyHours, blockedSlots, takenSlots, days]);
 
   const availableSlotsForSelectedDate = selectedDate ? (slotsByDate.get(dateKey(selectedDate)) ?? []) : [];
 

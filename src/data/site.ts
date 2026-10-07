@@ -31,16 +31,39 @@ export const business = {
     tiktok: 'https://www.tiktok.com/@chanellesmassage',
   },
 
-  // TODO: confirm real opening hours with Chanelle — these mirror the
-  // `business_hours` table in Supabase (see supabase/schema.sql) and should
-  // be kept in sync, or read from Supabase at build time once configured.
-  hours: [
+  // The old single-week schedule — still in effect for bookings before
+  // BIWEEKLY_ANCHOR_DATE (see src/lib/biweekly.ts). Mirrors the
+  // `business_hours` table in Supabase.
+  legacyHours: [
     { day: 'Monday', open: '09:00', close: '17:00' },
     { day: 'Tuesday', open: '09:00', close: '17:00' },
     { day: 'Wednesday', open: '09:00', close: '17:00' },
     { day: 'Thursday', open: '09:00', close: '19:00' },
     { day: 'Friday', open: '09:00', close: '19:00' },
     { day: 'Saturday', open: '10:00', close: '15:00' },
+    { day: 'Sunday', open: null, close: null },
+  ],
+
+  // Hours alternate on a 2-week cycle from BIWEEKLY_ANCHOR_DATE (see
+  // src/lib/biweekly.ts) onward. These mirror the `biweekly_hours` table in
+  // Supabase (see supabase/schema.sql) — keep in sync, or edit via /admin/
+  // and update here to match for the static Location page display.
+  week1Hours: [
+    { day: 'Monday', open: '08:00', close: '18:00' },
+    { day: 'Tuesday', open: '18:00', close: '21:00' },
+    { day: 'Wednesday', open: '18:00', close: '21:00' },
+    { day: 'Thursday', open: null, close: null },
+    { day: 'Friday', open: '18:00', close: '21:00' },
+    { day: 'Saturday', open: '18:00', close: '21:00' },
+    { day: 'Sunday', open: '08:00', close: '11:00' },
+  ],
+  week2Hours: [
+    { day: 'Monday', open: '08:00', close: '18:00' },
+    { day: 'Tuesday', open: '08:00', close: '16:00' },
+    { day: 'Wednesday', open: '07:30', close: '09:30' },
+    { day: 'Thursday', open: null, close: null },
+    { day: 'Friday', open: '07:30', close: '09:30' },
+    { day: 'Saturday', open: '07:30', close: '09:30' },
     { day: 'Sunday', open: null, close: null },
   ],
 };
