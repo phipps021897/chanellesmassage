@@ -102,12 +102,16 @@ hours. To change the anchor date or start a new biweekly schedule later, update
 display, which can't read Supabase live — see the `taken_slots`-style build-time fetch pattern in
 `src/lib/services.server.ts` if this needs to become dynamic too).
 
-### Adding email notifications later
+### Booking confirmation emails
 
-There's no automated "booking confirmed" email yet (kept out of v1 to avoid requiring another
-account/API key up front). The cleanest way to add it: a
-[Supabase Edge Function](https://supabase.com/docs/guides/functions) triggered by a database
-webhook on `bookings` insert/update, sending via [Resend](https://resend.com) or similar.
+A new booking sends two emails — a confirmation to the customer, and a notification to
+`chanelle_w08@outlook.com` — via a Supabase Edge Function
+([`supabase/functions/send-booking-emails/index.ts`](./supabase/functions/send-booking-emails/index.ts))
+triggered by a database webhook on `bookings` insert, sending through
+[Resend](https://resend.com). **See [`supabase/EMAIL-SETUP.md`](./supabase/EMAIL-SETUP.md) for the
+one-time dashboard setup** (create a Resend account, deploy the function, add the webhook — no
+command line needed). Until that setup is done, bookings still work fine; they just won't trigger
+emails yet.
 
 ### Adding online payment later
 
