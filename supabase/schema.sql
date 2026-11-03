@@ -188,6 +188,11 @@ alter table public.bookings enable row level security;
 
 -- Anyone can submit a booking request, but only ever as 'pending' — they
 -- cannot self-confirm, and they cannot read back other people's bookings.
+-- The explicit GRANT is required here — unlike every other table in this
+-- file, INSERT on bookings didn't work from the RLS policy alone in
+-- practice (Supabase's default privileges didn't cover it for this table).
+grant insert on public.bookings to anon, authenticated;
+
 drop policy if exists "public can create pending bookings" on public.bookings;
 create policy "public can create pending bookings"
   on public.bookings for insert
@@ -227,3 +232,38 @@ from public.bookings
 where status in ('pending', 'confirmed');
 
 grant select on public.taken_slots to anon, authenticated;
+
+-- ---------------------------------------------------------------------------
+-- booking email notifications — fires the send-booking-emails Edge Function
+-- on every new booking (see supabase/EMAIL-SETUP.md for full setup). Uses
+-- pg_net directly rather than the dashboard's Database Webhooks UI, since
+-- that UI depends on a `supabase_functions` helper schema that's only
+-- created the first time you use it — on a project that's never had one,
+-- referencing it fails with `schema "supabase_functions" does not exist`.
+-- ---------------------------------------------------------------------------
+create extension if not exists pg_net;
+
+create or replace function public.trigger_send_booking_emails()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  perform net.http_post(
+    url := 'https://zzbszhxzurxgwqoabmfo.supabase.co/functions/v1/send-booking-emails',
+    headers := '{"Content-Type": "application/json"}'::jsonb,
+    body := jsonb_build_object(
+      'type', 'INSERT',
+      'table', 'bookings',
+      'record', to_jsonb(new)
+    )
+  );
+  return new;
+end;
+$$;
+
+drop trigger if exists send_booking_emails_trigger on public.bookings;
+create trigger send_booking_emails_trigger
+after insert on public.bookings
+for each row
+execute function public.trigger_send_booking_emails();

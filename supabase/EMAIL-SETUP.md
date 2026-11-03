@@ -1,56 +1,104 @@
-# Setting up booking confirmation emails
+# Booking confirmation emails
 
 Sends two emails whenever someone submits a booking request: a confirmation to the customer, and
-a notification to `chanelle_w08@outlook.com`. No command line needed — everything below is done
-through the Supabase dashboard.
+a notification to `chanelle_w08@outlook.com`.
 
-## 1. Create a free Resend account
+**Status: live.** The Edge Function is deployed, the `RESEND_API_KEY` secret is set, and the
+database trigger is wired up. The steps below are for reference (e.g. redeploying to a new
+Supabase project) rather than things that still need doing.
 
-1. Go to [resend.com](https://resend.com) → sign up (free tier: 100 emails/day, 3,000/month, no
-   card required).
-2. **API Keys** (left sidebar) → **Create API Key** → copy it (starts with `re_`).
+## 1. Resend account
 
-## 2. Create the Edge Function
+[resend.com](https://resend.com) → free tier (100 emails/day, 3,000/month, no card required) →
+**API Keys** → create one, scoped to "Sending access" only.
 
-1. Supabase dashboard → **Edge Functions** (left sidebar) → **Create a new function**
-2. Name it exactly `send-booking-emails`
-3. Delete the placeholder code and paste in the contents of
-   [`supabase/functions/send-booking-emails/index.ts`](./functions/send-booking-emails/index.ts)
-   from this repo
-4. Click **Deploy**
+## 2. Deploy the Edge Function
 
-## 3. Add the Resend API key as a secret
+Either via the dashboard (**Edge Functions** → **Create a new function**, name it
+`send-booking-emails`, paste in
+[`supabase/functions/send-booking-emails/index.ts`](./functions/send-booking-emails/index.ts),
+**Deploy**, with **Enforce JWT verification turned off** since the trigger below calls it without a
+user session) — or via the Management API, which is how it was actually set up here:
 
-1. Still in **Edge Functions** → **Secrets** (or **Manage secrets**)
-2. Add a secret named `RESEND_API_KEY` with the value you copied from Resend
-3. (`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are already available to every Edge Function
-   automatically — nothing to add for those.)
+```sh
+curl -X POST "https://api.supabase.com/v1/projects/<project-ref>/functions" \
+  -H "Authorization: Bearer <supabase personal access token>" \
+  -H "Content-Type: application/json" \
+  -d '{"slug":"send-booking-emails","name":"send-booking-emails","verify_jwt":false,"entrypoint_path":"index.ts","body":"<file contents>"}'
+```
 
-## 4. Create the database webhook that triggers it
+## 3. Set the Resend API key as a secret
 
-1. Supabase dashboard → **Database** → **Webhooks** → **Create a new webhook**
-2. Name: `send-booking-emails`
-3. Table: `bookings`
-4. Events: tick **Insert** only (leave Update/Delete unticked)
-5. Type: **Supabase Edge Functions**
-6. Edge Function: select `send-booking-emails`
-7. HTTP method: `POST` (default)
-8. Click **Confirm**
+Dashboard: **Edge Functions** → **Secrets** → add `RESEND_API_KEY`. Via API:
+
+```sh
+curl -X POST "https://api.supabase.com/v1/projects/<project-ref>/secrets" \
+  -H "Authorization: Bearer <supabase personal access token>" \
+  -H "Content-Type: application/json" \
+  -d '[{"name":"RESEND_API_KEY","value":"<your resend key>"}]'
+```
+
+(`SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are provided automatically to every Edge Function —
+nothing to add for those.)
+
+## 4. Wire up the trigger
+
+The dashboard's **Database → Webhooks** UI depends on a `supabase_functions` helper schema that
+only gets created the first time you use that UI — on a project that's never had one, trying to
+create a trigger that references it fails with `schema "supabase_functions" does not exist`. The
+reliable fix is to use `pg_net` directly instead (run in the SQL Editor):
+
+```sql
+create extension if not exists pg_net;
+
+create or replace function public.trigger_send_booking_emails()
+returns trigger
+language plpgsql
+security definer
+as $$
+begin
+  perform net.http_post(
+    url := 'https://<project-ref>.supabase.co/functions/v1/send-booking-emails',
+    headers := '{"Content-Type": "application/json"}'::jsonb,
+    body := jsonb_build_object(
+      'type', 'INSERT',
+      'table', 'bookings',
+      'record', to_jsonb(NEW)
+    )
+  );
+  return NEW;
+end;
+$$;
+
+drop trigger if exists send_booking_emails_trigger on public.bookings;
+create trigger send_booking_emails_trigger
+after insert on public.bookings
+for each row
+execute function public.trigger_send_booking_emails();
+```
+
+This builds the exact same `{type, table, record}` JSON shape the Edge Function expects, without
+depending on any dashboard-provisioned schema.
 
 ## 5. Test it
 
-Submit a test booking through the live site's `/booking/` page using a real email address you can
-check. You should get a confirmation email, and `chanelle_w08@outlook.com` should get a
-notification email. If not, check **Edge Functions → send-booking-emails → Logs** in the Supabase
-dashboard for errors (most likely cause: `RESEND_API_KEY` missing or mistyped).
+Submit a booking through `/booking/` with a real email you can check, or invoke the function
+directly with a fake payload:
+
+```sh
+curl -X POST "https://<project-ref>.supabase.co/functions/v1/send-booking-emails" \
+  -H "Content-Type: application/json" \
+  -d '{"type":"INSERT","table":"bookings","record":{"id":"test","service_id":"00000000-0000-0000-0000-000000000000","customer_name":"Test","customer_email":"you@example.com","customer_phone":"0","start_at":"2026-11-10T14:00:00Z","end_at":"2026-11-10T14:30:00Z","notes":""}}'
+```
+
+If emails don't arrive, check **Edge Functions → send-booking-emails → Logs** in the dashboard —
+most likely cause is a missing/mistyped `RESEND_API_KEY`.
 
 ## Notes
 
-- Emails currently send from Resend's shared address (`onboarding@resend.dev`), so they'll show
-  "via resend.dev" in some mail clients. To use a proper `@chanellesmassage.co.uk` sender address
-  instead, verify the domain in Resend (**Domains** → **Add Domain** → add the DNS records it
-  gives you, similar to the GitHub Pages DNS setup) and update `FROM_EMAIL` in
-  `supabase/functions/send-booking-emails/index.ts`.
-- If a booking's email fails to send for any reason, the booking itself still succeeds and shows
-  up in the admin dashboard as normal — email is a notification layer on top, not a requirement
-  for the booking to go through.
+- Emails send from Resend's shared address (`onboarding@resend.dev`) for now, so may show "via
+  resend.dev" in some mail clients. To use a proper `@chanellesmassage.co.uk` sender, verify that
+  domain in Resend (**Domains** → **Add Domain**, similar DNS-record process to the GitHub Pages
+  setup) and update `FROM_EMAIL` in `supabase/functions/send-booking-emails/index.ts`.
+- If email sending fails for any reason, the booking itself still succeeds and shows up in the
+  admin dashboard as normal — `net.http_post` is fire-and-forget and doesn't block the insert.
