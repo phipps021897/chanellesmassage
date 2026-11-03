@@ -41,14 +41,23 @@ Without this step the site still builds and runs — the Services page falls bac
 placeholder data, and the booking/admin pages show a friendly "not configured yet" message
 instead of crashing.
 
-## 3. Enable GitHub Pages
+## 3. Deploying
 
-**Settings > Pages > Build and deployment > Source: GitHub Actions.** That's it — every push to
-`main` runs [`.github/workflows/deploy.yml`](./.github/workflows/deploy.yml), which builds the
-site and publishes it to `https://phipps021897.github.io/chanellesmassage/`.
+GitHub Actions wasn't registering for this repo (an unresolved platform quirk, not a config
+issue), so deployment is manual instead of automatic-on-push:
 
-If you later attach a custom domain, update `site`/`base` in `astro.config.mjs` (set `base: '/'`)
-and the `Sitemap:` line in `public/robots.txt`.
+```sh
+npm run build
+# then commit dist/ contents to the gh-pages branch and push — see git history
+# for the exact commands, or ask Claude to "push to github pages"
+```
+
+GitHub Pages is configured (Settings > Pages) with **Source: Deploy from a branch**, branch
+`gh-pages`, path `/`.
+
+The site is served from the custom domain **www.chanellesmassage.co.uk** (see `public/CNAME` and
+`site`/`base` in `astro.config.mjs`). DNS: a `CNAME` record for `www` pointing to
+`phipps021897.github.io`.
 
 ## 4. Local development
 

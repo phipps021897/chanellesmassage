@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /admin/
 
-Sitemap: https://phipps021897.github.io/chanellesmassage/sitemap-index.xml
+Sitemap: https://www.chanellesmassage.co.uk/sitemap-index.xml

@@ -4,10 +4,10 @@ import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwindcss from '@tailwindcss/vite';
 
-// Deployed to GitHub Pages at https://phipps021897.github.io/chanellesmassage/
-// If a custom domain is later attached, change `base` to '/' and update `site` to the custom domain.
-const SITE_URL = 'https://phipps021897.github.io';
-const BASE_PATH = '/chanellesmassage';
+// Served from the custom domain (see public/CNAME) at its root, rather than
+// the default https://phipps021897.github.io/chanellesmassage/ subpath.
+const SITE_URL = 'https://www.chanellesmassage.co.uk';
+const BASE_PATH = '/';
 
 // https://astro.build/config
 export default defineConfig({
