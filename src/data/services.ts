@@ -22,7 +22,7 @@ export const placeholderServices: Service[] = [
     description:
       'A focused sports massage session to ease muscle tension, support recovery and improve mobility.',
     durationMinutes: 30,
-    pricePence: 2500,
+    pricePence: 3000,
     isActive: true,
     sortOrder: 1,
   },
@@ -33,7 +33,7 @@ export const placeholderServices: Service[] = [
     description:
       'A full sports massage treatment for deeper, more thorough work on problem areas and recovery.',
     durationMinutes: 60,
-    pricePence: 4500,
+    pricePence: 5000,
     isActive: true,
     sortOrder: 2,
   },
@@ -44,7 +44,7 @@ export const placeholderServices: Service[] = [
     description:
       'Includes a consultation to assess your needs and goals alongside a 30-minute sports massage — ideal for a first visit.',
     durationMinutes: 30,
-    pricePence: 3000,
+    pricePence: 3500,
     isActive: true,
     sortOrder: 3,
   },
@@ -55,9 +55,31 @@ export const placeholderServices: Service[] = [
     description:
       'A full consultation plus a 60-minute sports massage treatment, tailored to your training or recovery needs.',
     durationMinutes: 60,
-    pricePence: 5000,
+    pricePence: 5500,
     isActive: true,
     sortOrder: 4,
+  },
+  {
+    id: 'placeholder-swedish-60',
+    slug: 'swedish-massage-60',
+    name: 'Full Body Swedish Massage — 60 min',
+    description:
+      'A gentle, flowing full-body massage to ease tension, calm the nervous system and leave you feeling restored.',
+    durationMinutes: 60,
+    pricePence: 4500,
+    isActive: true,
+    sortOrder: 5,
+  },
+  {
+    id: 'placeholder-swedish-back-30',
+    slug: 'swedish-back-neck-shoulders-30',
+    name: 'Back, Neck & Shoulders Swedish Massage — 30 min',
+    description:
+      'A focused Swedish massage on the areas that hold the most tension — perfect for a lunch break reset.',
+    durationMinutes: 30,
+    pricePence: 2500,
+    isActive: true,
+    sortOrder: 6,
   },
 ];
 
@@ -79,8 +101,8 @@ export interface SessionCard {
 // calendar. They're listed on the Services page for pricing only; Chanelle
 // tracks and redeems them manually when booking returning clients in.
 export const sessionCards: SessionCard[] = [
-  { id: 'card-3x30', name: '3-Session Card', durationMinutes: 30, sessionCount: 3, pricePence: 7000 },
-  { id: 'card-3x60', name: '3-Session Card', durationMinutes: 60, sessionCount: 3, pricePence: 12500 },
-  { id: 'card-6x30', name: '6-Session Card', durationMinutes: 30, sessionCount: 6, pricePence: 13000 },
+  { id: 'card-3x30', name: '3-Session Card', durationMinutes: 30, sessionCount: 3, pricePence: 8000 },
+  { id: 'card-3x60', name: '3-Session Card', durationMinutes: 60, sessionCount: 3, pricePence: 14000 },
+  { id: 'card-6x30', name: '6-Session Card', durationMinutes: 30, sessionCount: 6, pricePence: 15000 },
   { id: 'card-6x60', name: '6-Session Card', durationMinutes: 60, sessionCount: 6, pricePence: 25000 },
 ];

@@ -85,21 +85,27 @@ export default function AvailabilityTab({ supabase }: { supabase: SupabaseClient
 
   const load = useCallback(async () => {
     setLoading(true);
-    const [legacyRes, biweeklyRes, blockedRes] = await Promise.all([
-      supabase.from('business_hours').select('*').order('day_of_week', { ascending: true }),
-      supabase.from('biweekly_hours').select('*').order('week_number', { ascending: true }),
-      supabase.from('blocked_slots').select('*').order('start_at', { ascending: true }),
-    ]);
-    if (legacyRes.error || blockedRes.error) {
-      setError('Could not load availability.');
+    setError(null);
+    try {
+      const [legacyRes, biweeklyRes, blockedRes] = await Promise.all([
+        supabase.from('business_hours').select('*').order('day_of_week', { ascending: true }),
+        supabase.from('biweekly_hours').select('*').order('week_number', { ascending: true }),
+        supabase.from('blocked_slots').select('*').order('start_at', { ascending: true }),
+      ]);
+      if (legacyRes.error || blockedRes.error) {
+        setError('Could not load availability.');
+      }
+      if (biweeklyRes.error) {
+        setError('Week 1 / Week 2 tables not found — run the latest supabase/schema.sql to add them.');
+      }
+      setLegacyHours((legacyRes.data ?? []) as HourRow[]);
+      setBiweeklyHours((biweeklyRes.data ?? []) as BiweeklyHourRow[]);
+      setBlocked((blockedRes.data ?? []) as BlockedRow[]);
+    } catch {
+      setError("Couldn't reach Supabase — check your connection and try again.");
+    } finally {
+      setLoading(false);
     }
-    if (biweeklyRes.error) {
-      setError('Week 1 / Week 2 tables not found — run the latest supabase/schema.sql to add them.');
-    }
-    setLegacyHours((legacyRes.data ?? []) as HourRow[]);
-    setBiweeklyHours((biweeklyRes.data ?? []) as BiweeklyHourRow[]);
-    setBlocked((blockedRes.data ?? []) as BlockedRow[]);
-    setLoading(false);
   }, [supabase]);
 
   useEffect(() => {

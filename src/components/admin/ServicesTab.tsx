@@ -37,10 +37,16 @@ export default function ServicesTab({ supabase }: { supabase: SupabaseClient }) 
 
   const load = useCallback(async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('services').select('*').order('sort_order', { ascending: true });
-    if (error) setError('Could not load services.');
-    else setServices((data ?? []) as ServiceRow[]);
-    setLoading(false);
+    setError(null);
+    try {
+      const { data, error } = await supabase.from('services').select('*').order('sort_order', { ascending: true });
+      if (error) setError('Could not load services.');
+      else setServices((data ?? []) as ServiceRow[]);
+    } catch {
+      setError("Couldn't reach Supabase — check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   }, [supabase]);
 
   useEffect(() => {

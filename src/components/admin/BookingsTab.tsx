@@ -34,27 +34,32 @@ export default function BookingsTab({ supabase }: { supabase: SupabaseClient }) 
     setLoading(true);
     setError(null);
 
-    let query = supabase
-      .from('bookings')
-      .select(
-        'id, service_id, customer_name, customer_email, customer_phone, start_at, end_at, status, notes, services ( name, price_pence )'
-      )
-      .order('start_at', { ascending: true });
+    try {
+      let query = supabase
+        .from('bookings')
+        .select(
+          'id, service_id, customer_name, customer_email, customer_phone, start_at, end_at, status, notes, services ( name, price_pence )'
+        )
+        .order('start_at', { ascending: true });
 
-    if (filter === 'upcoming') {
-      query = query.gte('start_at', new Date().toISOString()).neq('status', 'cancelled');
-    } else if (filter === 'pending') {
-      query = query.eq('status', 'pending');
+      if (filter === 'upcoming') {
+        query = query.gte('start_at', new Date().toISOString()).neq('status', 'cancelled');
+      } else if (filter === 'pending') {
+        query = query.eq('status', 'pending');
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        setError('Could not load bookings.');
+      } else {
+        setBookings((data ?? []) as unknown as BookingRow[]);
+      }
+    } catch {
+      setError("Couldn't reach Supabase — check your connection and try again.");
+    } finally {
+      setLoading(false);
     }
-
-    const { data, error } = await query;
-
-    if (error) {
-      setError('Could not load bookings.');
-    } else {
-      setBookings((data ?? []) as unknown as BookingRow[]);
-    }
-    setLoading(false);
   }, [supabase, filter]);
 
   useEffect(() => {

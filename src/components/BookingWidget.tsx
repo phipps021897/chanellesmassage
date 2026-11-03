@@ -83,53 +83,65 @@ export default function BookingWidget() {
       const rangeEnd = new Date();
       rangeEnd.setDate(rangeEnd.getDate() + DAYS_AHEAD);
 
-      const [servicesRes, legacyHoursRes, biweeklyHoursRes, blockedRes, takenRes] = await Promise.all([
-        supabase
-          .from('services')
-          .select('id, slug, name, description, duration_minutes, price_pence, is_active, sort_order')
-          .eq('is_active', true)
-          .order('sort_order', { ascending: true }),
-        supabase.from('business_hours').select('day_of_week, start_time, end_time, is_closed'),
-        supabase
-          .from('biweekly_hours')
-          .select('day_of_week, week_number, start_time, end_time, is_closed'),
-        supabase
-          .from('blocked_slots')
-          .select('start_at, end_at')
-          .lte('start_at', rangeEnd.toISOString())
-          .gte('end_at', rangeStart.toISOString()),
-        supabase
-          .from('taken_slots')
-          .select('service_id, start_at, end_at, status')
-          .gte('start_at', rangeStart.toISOString())
-          .lte('start_at', rangeEnd.toISOString()),
-      ]);
+      try {
+        const [servicesRes, legacyHoursRes, biweeklyHoursRes, blockedRes, takenRes] = await Promise.all([
+          supabase
+            .from('services')
+            .select('id, slug, name, description, duration_minutes, price_pence, is_active, sort_order')
+            .eq('is_active', true)
+            .order('sort_order', { ascending: true }),
+          supabase.from('business_hours').select('day_of_week, start_time, end_time, is_closed'),
+          supabase
+            .from('biweekly_hours')
+            .select('day_of_week, week_number, start_time, end_time, is_closed'),
+          supabase
+            .from('blocked_slots')
+            .select('start_at, end_at')
+            .lte('start_at', rangeEnd.toISOString())
+            .gte('end_at', rangeStart.toISOString()),
+          supabase
+            .from('taken_slots')
+            .select('service_id, start_at, end_at, status')
+            .gte('start_at', rangeStart.toISOString())
+            .lte('start_at', rangeEnd.toISOString()),
+        ]);
 
-      if (cancelled) return;
+        if (cancelled) return;
 
-      // biweeklyHoursRes is deliberately excluded from this check: the
-      // `biweekly_hours` table is a newer addition that may not exist yet in
-      // every deployment (see supabase/schema.sql). If it's missing, booking
-      // still works for near-term dates via the legacy schedule — only
-      // dates on/after the biweekly anchor would show no slots until the
-      // table is created.
-      if (servicesRes.error || legacyHoursRes.error || blockedRes.error || takenRes.error) {
-        setLoadError('Something went wrong loading availability. Please try again shortly, or call/email to book.');
+        // biweeklyHoursRes is deliberately excluded from this check: the
+        // `biweekly_hours` table is a newer addition that may not exist yet in
+        // every deployment (see supabase/schema.sql). If it's missing, booking
+        // still works for near-term dates via the legacy schedule — only
+        // dates on/after the biweekly anchor would show no slots until the
+        // table is created.
+        if (servicesRes.error || legacyHoursRes.error || blockedRes.error || takenRes.error) {
+          setLoadError('Something went wrong loading availability. Please try again shortly, or call/email to book.');
+          setLoading(false);
+          return;
+        }
+
+        if (servicesRes.data && servicesRes.data.length > 0) {
+          setServices(servicesRes.data.map(toRowService));
+        }
+        setLegacyHours((legacyHoursRes.data ?? []) as BusinessHourRow[]);
+        if (biweeklyHoursRes.error) {
+          console.warn('[chanellesmassage] biweekly_hours table not found yet — run the latest supabase/schema.sql.');
+        }
+        setBiweeklyHours((biweeklyHoursRes.data ?? []) as BiweeklyHourRow[]);
+        setBlockedSlots((blockedRes.data ?? []) as BlockedSlotRow[]);
+        setTakenSlots((takenRes.data ?? []) as TakenSlotRow[]);
         setLoading(false);
-        return;
+      } catch {
+        // A hard network failure (offline, DNS failure, Supabase unreachable)
+        // rejects the fetch entirely rather than resolving with `.error`, so
+        // it needs its own catch — otherwise the UI is stuck on "Loading…"
+        // forever instead of telling the visitor what to do.
+        if (cancelled) return;
+        setLoadError(
+          "Couldn't reach the booking system — check your connection and try again, or call/email to book."
+        );
+        setLoading(false);
       }
-
-      if (servicesRes.data && servicesRes.data.length > 0) {
-        setServices(servicesRes.data.map(toRowService));
-      }
-      setLegacyHours((legacyHoursRes.data ?? []) as BusinessHourRow[]);
-      if (biweeklyHoursRes.error) {
-        console.warn('[chanellesmassage] biweekly_hours table not found yet — run the latest supabase/schema.sql.');
-      }
-      setBiweeklyHours((biweeklyHoursRes.data ?? []) as BiweeklyHourRow[]);
-      setBlockedSlots((blockedRes.data ?? []) as BlockedSlotRow[]);
-      setTakenSlots((takenRes.data ?? []) as TakenSlotRow[]);
-      setLoading(false);
     }
 
     load();
@@ -180,16 +192,21 @@ export default function BookingWidget() {
 
     const endAt = new Date(selectedSlot.getTime() + selectedService.durationMinutes * 60_000);
 
-    const { error } = await supabase.from('bookings').insert({
-      service_id: selectedService.id,
-      customer_name: name.trim(),
-      customer_email: email.trim(),
-      customer_phone: phone.trim(),
-      start_at: selectedSlot.toISOString(),
-      end_at: endAt.toISOString(),
-      status: 'pending',
-      notes: notes.trim(),
-    });
+    let error;
+    try {
+      ({ error } = await supabase.from('bookings').insert({
+        service_id: selectedService.id,
+        customer_name: name.trim(),
+        customer_email: email.trim(),
+        customer_phone: phone.trim(),
+        start_at: selectedSlot.toISOString(),
+        end_at: endAt.toISOString(),
+        status: 'pending',
+        notes: notes.trim(),
+      }));
+    } catch {
+      error = true;
+    }
 
     setSubmitting(false);
 

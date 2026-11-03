@@ -12,11 +12,15 @@ export default function LoginForm({ supabase }: { supabase: SupabaseClient }) {
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    setLoading(false);
-    if (error) {
-      setError('Incorrect email or password.');
+    try {
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError('Incorrect email or password.');
+      }
+    } catch {
+      setError("Couldn't reach Supabase — check your connection and try again.");
+    } finally {
+      setLoading(false);
     }
   }
 
