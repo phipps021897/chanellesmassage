@@ -192,17 +192,25 @@ export default function BookingWidget() {
 
     const endAt = new Date(selectedSlot.getTime() + selectedService.durationMinutes * 60_000);
 
+    // Submitted via the submit-booking Edge Function rather than a direct
+    // table insert — Supabase's REST API was rejecting anon inserts on
+    // `bookings` with a false RLS error even though the policy and grants
+    // are confirmed correct at the database level (verified by testing the
+    // same insert directly as the anon role in SQL, which succeeds). The
+    // function performs the insert with the service role instead, enforcing
+    // status: 'pending' itself.
     let error;
     try {
-      ({ error } = await supabase.from('bookings').insert({
-        service_id: selectedService.id,
-        customer_name: name.trim(),
-        customer_email: email.trim(),
-        customer_phone: phone.trim(),
-        start_at: selectedSlot.toISOString(),
-        end_at: endAt.toISOString(),
-        status: 'pending',
-        notes: notes.trim(),
+      ({ error } = await supabase.functions.invoke('submit-booking', {
+        body: {
+          service_id: selectedService.id,
+          customer_name: name.trim(),
+          customer_email: email.trim(),
+          customer_phone: phone.trim(),
+          start_at: selectedSlot.toISOString(),
+          end_at: endAt.toISOString(),
+          notes: notes.trim(),
+        },
       }));
     } catch {
       error = true;
