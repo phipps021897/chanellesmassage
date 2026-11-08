@@ -19,7 +19,7 @@ const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 // for a more professional sender address. Resend's shared address below
 // works immediately with no extra setup, but shows "via resend.dev".
 const FROM_EMAIL = "Chanelle's Massage <onboarding@resend.dev>";
-const CHANELLE_EMAIL = 'chanelle_w08@outlook.com';
+const CHANELLE_EMAIL = 'chanellesmassage@gmail.com';
 const ADMIN_URL = 'https://www.chanellesmassage.co.uk/admin/';
 
 interface BookingRecord {
