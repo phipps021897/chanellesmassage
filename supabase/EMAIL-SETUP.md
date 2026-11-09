@@ -96,9 +96,10 @@ most likely cause is a missing/mistyped `RESEND_API_KEY`.
 
 ## Notes
 
-- Emails send from Resend's shared address (`onboarding@resend.dev`) for now, so may show "via
-  resend.dev" in some mail clients. To use a proper `@chanellesmassage.co.uk` sender, verify that
-  domain in Resend (**Domains** → **Add Domain**, similar DNS-record process to the GitHub Pages
-  setup) and update `FROM_EMAIL` in `supabase/functions/send-booking-emails/index.ts`.
+- Emails send from `bookings@chanellesmassage.co.uk` — `chanellesmassage.co.uk` is verified as a
+  sending domain in Resend (**Domains**), with DNS records added at GoDaddy alongside the GitHub
+  Pages ones. Without a verified domain, Resend's sandbox mode silently restricts delivery to only
+  the Resend account's own email address — if emails ever stop arriving, check **Domains** in
+  Resend first for a verification that's lapsed or broken.
 - If email sending fails for any reason, the booking itself still succeeds and shows up in the
   admin dashboard as normal — `net.http_post` is fire-and-forget and doesn't block the insert.
