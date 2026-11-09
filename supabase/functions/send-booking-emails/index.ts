@@ -14,11 +14,7 @@ const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
 const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
-// TODO: once a domain is verified in Resend (e.g. chanellesmassage.co.uk),
-// change this to something like 'Chanelle\'s Massage <bookings@chanellesmassage.co.uk>'
-// for a more professional sender address. Resend's shared address below
-// works immediately with no extra setup, but shows "via resend.dev".
-const FROM_EMAIL = "Chanelle's Massage <onboarding@resend.dev>";
+const FROM_EMAIL = "Chanelle's Massage <bookings@chanellesmassage.co.uk>";
 const CHANELLE_EMAIL = 'chanellesmassage@gmail.com';
 const ADMIN_URL = 'https://www.chanellesmassage.co.uk/admin/';
 
